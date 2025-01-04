@@ -12,8 +12,7 @@ import winsound
 - the space between different words is seven seconds
 """
 
-string = """Fuck
-Another turning point, a fork stuck in the road
+string = """Another turning point, a fork stuck in the road
 Time grabs you by the wrist, directs you where to go
 So make the best of this test, and don't ask why
 It's not a question, but a lesson learned in time
