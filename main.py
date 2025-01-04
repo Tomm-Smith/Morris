@@ -18,24 +18,24 @@ class Morris:
         
         # Text Code
         self.text_code_lbl = tk.Label(self.root, text="Text Code:")
-        self.text_code_lbl.pack(side="left")
+        self.text_code_lbl.pack()
         
-        self.text_code = tk.Text(self.root)
-        self.text_code.pack(fill="both")
+        self.text_code = tk.Text(self.root, height=1, width=1)
+        self.text_code.pack(fill="both", expand=True)
         
         # Morse Code
         self.morse_code_lbl = tk.Label(self.root, text="Morse Code:")
-        self.morse_code_lbl.pack(side="left")
+        self.morse_code_lbl.pack()
         
-        self.morse_code = tk.Text(self.root)
-        self.morse_code.pack(fill="both")
+        self.morse_code = tk.Text(self.root, height=1, width=1)
+        self.morse_code.pack(fill="both", expand=True)
         
         # Navigation
         self.nav_btn_frame = tk.Frame(self.root)
         self.nav_btn_frame.pack(side="right", expand="False", fill="none")
         
-        # Beam Me Up
-        self.morse_btn = tk.Button(self.nav_btn_frame, text="Beam Me Up", command=self.__morse_btn_clicked__)
+        # Generate
+        self.morse_btn = tk.Button(self.nav_btn_frame, text="Generate", command=self.__morse_btn_clicked__)
         self.morse_btn.pack(side="right", expand="False", fill="none")
         # Clear
         self.clear_btn = tk.Button(self.nav_btn_frame, text="Clear", command=self.__clear_btn_clicked__)
