@@ -8,6 +8,13 @@ import tkinter as tk
 
 
 class Morris:
+    '''
+        Notes:
+            - The formatting is strict and requires:
+                - every word be seperated by a space block ' '
+                - no word willd start with a space block
+                - last word must have a space block
+    '''
     text = {
             '.-'    : 'A',
             '-...'  : 'B',
@@ -35,16 +42,16 @@ class Morris:
             '-..-'  : 'X',
             '-.--'  : 'Y',
             '--..'  : 'Z',
-            '.----' : '0',
-            '..---' : '1',
-            '...--' : '2',
-            '....-' : '3',
-            '.....' : '4',
-            '-....' : '5',
-            '--...' : '6',
-            '---..' : '7',
-            '----.' : '8',
-            '-----' : '9'
+            '.----' : '1',
+            '..---' : '2',
+            '...--' : '3',
+            '....-' : '4',
+            '.....' : '5',
+            '-....' : '6',
+            '--...' : '7',
+            '---..' : '8',
+            '----.' : '9',
+            '-----' : '0'
             }
     morse = {
             'A' : '.-',
@@ -111,6 +118,7 @@ class Morris:
         m_word = ""
         
         for char in code:
+            print("m2t(): morse char:" + char)
             # Morse word terminated by white space, handle word
             if char == ' ':
                 try:
@@ -118,9 +126,10 @@ class Morris:
                 except KeyError:
                     print("DEBUG: m2t() - except KeyError: Invalid Key in dict" + m_word)
                 else:
-                    t_code = t_code + self.text[m_word] + ' '
+                    t_code = t_code + self.text[m_word]
                     m_word = ''
-                    
+                
+                t_code = t_code + ' '
             # Store morris character 
             else:
                 m_word = m_word + char
@@ -135,6 +144,24 @@ class GUI:
         #self.root.minsize(777, 575)
         
         self.morris = Morris()
+        
+        
+        ### GUI Layout ###
+        # File Menu
+        self.menu = tk.Menu(self.root)
+        
+        filemenu = tk.Menu(self.menu, tearoff=0)
+        filemenu.add_command(label="Open", command="")
+        filemenu.add_command(label="Save", command="")
+        filemenu.add_separator()
+        filemenu.add_command(label="Exit", command=self.root.destroy)
+        self.menu.add_cascade(label="File", menu=filemenu)
+        
+        helpmenu = tk.Menu(self.menu, tearoff=0)
+        helpmenu.add_command(label="About", command="")
+        self.menu.add_cascade(label="Help", menu=helpmenu)
+        
+        self.root.config(menu=self.menu)
         
         # Text Code
         self.text_code_lbl = tk.Label(self.root, text="Text Code:")
@@ -168,11 +195,11 @@ class GUI:
     def __menubar__(self):
         self.menu = tk.Menu(self.root)
         
-        self.filebar = tk.Menu(self.root)
+        self.filebar = tk.Menu(self.menu)
         self.filebar.add_command(label="Exit", command="")
         self.filebar.add_cascade(label="File", menu=filebar)
         
-        self.helpbar = tk.Menu(root)
+        self.helpbar = tk.Menu(self.menu)
         self.helpbar.add_command("About", command="")
         self.helpbar.add_cascade(label="Help", menu=helpbar)
         
