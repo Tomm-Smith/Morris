@@ -2,7 +2,8 @@
 
 
 import tkinter as tk
-
+import winsound
+from time import sleep
 
 
 
@@ -15,6 +16,10 @@ class Morris:
                 - no word willd start with a space block
                 - last word must have a space block
     '''
+    dot = 3
+    dash = 7
+    char_space = 1
+    word_space = 3
     text = {
             '.-'    : 'A',
             '-...'  : 'B',
@@ -95,6 +100,14 @@ class Morris:
     def __init__(self):
             None
             
+    def isMorse(self, char):
+        try:
+            self.text[char]
+        except KeyError:
+            return False
+        else:
+            return True
+        
     def t2m(self, code):
         """ t2m() - Text 2 Morse """
         m_code = ""
@@ -135,7 +148,17 @@ class Morris:
                 m_word = m_word + char
 
         return t_code
-
+    
+    def play(self, code):
+        for char in code:
+            if char == '.':
+                winsound.Beep(700, 60 * self.dot)
+                sleep(60 * self.char_space / 1000)
+            elif char == '-':
+                winsound.Beep(700, 60 * self.dash)
+                sleep(60 * self.char_space / 1000)
+            elif char == ' ':
+                sleep(60 * self.word_space / 1000)
 
 class GUI:
     def __init__(self):
@@ -150,16 +173,26 @@ class GUI:
         # File Menu
         self.menu = tk.Menu(self.root)
         
-        filemenu = tk.Menu(self.menu, tearoff=0)
-        filemenu.add_command(label="Open", command="")
-        filemenu.add_command(label="Save", command="")
-        filemenu.add_separator()
-        filemenu.add_command(label="Exit", command=self.root.destroy)
-        self.menu.add_cascade(label="File", menu=filemenu)
+        self.filemenu = tk.Menu(self.menu, tearoff=0)
+        self.filemenu.add_command(label="Open", command="")
+        self.filemenu.add_command(label="Save", command="")
+        self.filemenu.add_separator()
+        self.filemenu.add_command(label="Exit", command=self.root.destroy)
+        self.menu.add_cascade(label="File", menu=self.filemenu)
         
-        helpmenu = tk.Menu(self.menu, tearoff=0)
-        helpmenu.add_command(label="About", command="")
-        self.menu.add_cascade(label="Help", menu=helpmenu)
+        self.actionmenu = tk.Menu(self.menu, tearoff=0)
+        self.actionmenu.add_command(label="Play Morse", command=self.__action_play_morse_clicked__)
+        self.menu.add_cascade(label="Action", menu=self.actionmenu)
+        
+        self.actionsubmenu1 = tk.Menu(self.actionmenu)
+        self.actionmenu.add_cascade(label="White Space Char", menu=self.actionsubmenu1)
+        self.actionsubmenu1.add_command(label="/")
+        self.actionsubmenu1.add_command(label=":")
+        self.actionsubmenu1.add_command(label=";")
+        
+        self.helpmenu = tk.Menu(self.menu, tearoff=0)
+        self.helpmenu.add_command(label="About", command="")
+        self.menu.add_cascade(label="Help", menu=self.helpmenu)
         
         self.root.config(menu=self.menu)
         
@@ -191,19 +224,6 @@ class GUI:
         # Clear
         self.clear_btn = tk.Button(self.nav_btn_frame, text="Clear", command=self.__clear_btn_clicked__)
         self.clear_btn.pack(side="right", expand="False", fill="none")
-
-    def __menubar__(self):
-        self.menu = tk.Menu(self.root)
-        
-        self.filebar = tk.Menu(self.menu)
-        self.filebar.add_command(label="Exit", command="")
-        self.filebar.add_cascade(label="File", menu=filebar)
-        
-        self.helpbar = tk.Menu(self.menu)
-        self.helpbar.add_command("About", command="")
-        self.helpbar.add_cascade(label="Help", menu=helpbar)
-        
-        root.config(menu=self.menu)
         
     def __clear_btn_clicked__(self):
         self.text_code.delete("0.0", "end")
@@ -223,7 +243,9 @@ class GUI:
             self.morse_code.delete("0.0", "end")
             self.morse_code.insert("0.0", self.morris.t2m(text))
         
-
+    def __action_play_morse_clicked__(self):
+        morse_code = self.morse_code.get("0.0", "end")
+        self.morris.play(morse_code)
 
 
 
