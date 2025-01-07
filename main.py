@@ -10,6 +10,9 @@ from time import sleep
 
 class Morris:
     '''
+        Morris - A Simple Morse Code Library
+        
+        
         Notes:
             - The formatting is strict and requires:
                 - every word be seperated by a space block ' '
@@ -20,6 +23,7 @@ class Morris:
     dash = 7
     char_space = 1
     word_space = 3
+    space_char = '/'
     text = {
             '.-'    : 'A',
             '-...'  : 'B',
@@ -47,6 +51,7 @@ class Morris:
             '-..-'  : 'X',
             '-.--'  : 'Y',
             '--..'  : 'Z',
+            '-----' : '0',
             '.----' : '1',
             '..---' : '2',
             '...--' : '3',
@@ -56,7 +61,7 @@ class Morris:
             '--...' : '7',
             '---..' : '8',
             '----.' : '9',
-            '-----' : '0'
+            '   '   : ' '
             }
     morse = {
             'A' : '.-',
@@ -94,7 +99,8 @@ class Morris:
             '6' : '--...',
             '7' : '---..',
             '8' : '----.',
-            '9' : '-----'
+            '9' : '-----',
+            ' ' : '  ' # TODO: Make this formal so it doesn't adjust for trailing whitespace
             }
 
     def __init__(self):
@@ -111,8 +117,21 @@ class Morris:
     def t2m(self, code):
         """ t2m() - Text 2 Morse """
         m_code = ""
+        space = ''
+        word_bool = False
         
         for char in code:
+            # TODO: Make this cleaner and less hacky
+            if word_bool and char == ' ':
+                word_bool = False
+                space = ''
+            elif not word_bool and char == ' ':
+                space = ' '
+                continue
+            else:
+                word_bool = True
+                space = ' '
+                
             # Check for valid character in dict, pass and print otherwise
             try:
                 self.morse[char.upper()]
@@ -121,7 +140,8 @@ class Morris:
                 continue
             # Append code 
             else:
-                m_code = m_code + self.morse[char.upper()] + ' '
+                m_code = m_code + self.morse[char.upper()] + space
+            
             
         return m_code
         
@@ -129,11 +149,13 @@ class Morris:
         """ m2t() - Morse 2 Text"""
         t_code = ""
         m_word = ""
+        ws_bool = False
         
         for char in code:
             print("m2t(): morse char:" + char)
             # Morse word terminated by white space, handle word
-            if char == ' ':
+            if char == ' ' and not ws_bool:
+                ws_bool = True
                 try:
                     self.text[m_word]
                 except KeyError:
@@ -142,10 +164,14 @@ class Morris:
                     t_code = t_code + self.text[m_word]
                     m_word = ''
                 
-                t_code = t_code + ' '
+                t_code = t_code
+            elif char == ' ' and ws_bool:
+                continue
             # Store morris character 
             else:
+                ws_bool = False
                 m_word = m_word + char
+
 
         return t_code
     
@@ -159,6 +185,7 @@ class Morris:
                 sleep(60 * self.char_space / 1000)
             elif char == ' ':
                 sleep(60 * self.word_space / 1000)
+
 
 class GUI:
     def __init__(self):
@@ -246,6 +273,7 @@ class GUI:
     def __action_play_morse_clicked__(self):
         morse_code = self.morse_code.get("0.0", "end")
         self.morris.play(morse_code)
+
 
 
 
