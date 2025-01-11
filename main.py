@@ -60,7 +60,10 @@ class Morris:
             '-....' : '6',
             '--...' : '7',
             '---..' : '8',
-            '----.' : '9'
+            '----.' : '9',
+            '.-.-.-': '.',
+            '--..--': ',',
+            '..--..': '?'
             }
     morse = {
             'A' : '.-',
@@ -98,12 +101,22 @@ class Morris:
             '6' : '--...',
             '7' : '---..',
             '8' : '----.',
-            '9' : '-----'
+            '9' : '-----',
+            '.' : '.-.-.-',
+            ',' : '--..--',
+            '?' : '..--..'
             }
 
     def __init__(self):
             None
             
+    def set_space(self, char):
+        """ set_space(char) - Assign the internal word space character
+        """
+        self.space_char = char
+        
+        return True
+        
     def isMorse(self, char):
         try:
             self.text[char]
@@ -119,18 +132,38 @@ class Morris:
         """
         code_len = len(code)
         m_code = ''
-        word_space = ' / '
         word_bool = False
 
         for i in range(code_len):
-            if code[i] != ' ':
-                word_bool = True
-                m_code = m_code + self.morse[code[i].upper()] + " "
-                
-            elif word_bool and code[i] == ' ':
+
+            # Deal with characters
+            # First whitespace after finishing a word
+            if word_bool and code[i] == ' ':
                 word_bool = False
-                m_code = m_code + word_space
+                # Slice off trailing space and control internally
+                m_code = m_code[0:-1]
                 
+                print(":" + self.space_char + ":")
+                if self.space_char == ' ':
+                    space = ' '
+                elif self.space_char == '   ':
+                    space = '   '
+                else:
+                    space = ' ' + self.space_char + ' '
+                    
+                m_code = m_code + space
+                    
+                print(m_code)
+            elif code[i] != ' ':
+                word_bool = True
+                # Supress KeyError exception for all other characters
+                try:
+                    # Append space to seperate morse words
+                    m_code = m_code + self.morse[code[i].upper()] + ' '
+                except KeyError:
+                    continue
+
+            # Ignore all other whitespace
             elif code[i] == ' ':
                 continue
                 
@@ -139,7 +172,7 @@ class Morris:
                 
                 
         # Remove trailing space and word seperator
-        if m_code[-3:] == word_space:
+        if m_code[-3:] == ' ' + self.space_char + ' ':
             m_code = m_code[0:-3]
         if m_code[-1] == ' ':
             m_code = m_code[0:-1]
@@ -152,8 +185,30 @@ class Morris:
         m_word = ""
         ws_bool = False
         
+        for char in code:
+            print("m2t(): morse char:" + char)
+            # Morse word terminated by white space, handle word
+            if char == ' ' and not ws_bool:
+                ws_bool = True
+                try:
+                    self.text[m_word]
+                except KeyError:
+                    print("DEBUG: m2t() - except KeyError: Invalid Key in dict" + m_word)
+                else:
+                    t_code = t_code + self.text[m_word]
+                    m_word = ''
+                
+                t_code = t_code
+            elif char == ' ' and ws_bool:
+                continue
+            # Store morris character 
+            else:
+                ws_bool = False
+                m_word = m_word + char
+
+
+        return t_code
         
-    
     def play(self, code):
         for char in code:
             if char == '.':
@@ -187,14 +242,23 @@ class GUI:
         self.menu.add_cascade(label="File", menu=self.filemenu)
         
         self.actionmenu = tk.Menu(self.menu, tearoff=0)
-        self.actionmenu.add_command(label="Play Morse", command=self.__action_play_morse_clicked__)
+        self.actionmenu.add_command(label="Play Morse", 
+            command=self.__action_play_morse_clicked__)
         self.menu.add_cascade(label="Action", menu=self.actionmenu)
         
         self.actionsubmenu1 = tk.Menu(self.actionmenu)
-        self.actionmenu.add_cascade(label="White Space Char", menu=self.actionsubmenu1)
-        self.actionsubmenu1.add_command(label="/")
-        self.actionsubmenu1.add_command(label=":")
-        self.actionsubmenu1.add_command(label=";")
+        self.actionmenu.add_cascade(label="White Space Char", 
+            menu=self.actionsubmenu1)
+        self.actionsubmenu1.add_command(label="1 Space", 
+            command=lambda: self.morris.set_space(' '))
+        self.actionsubmenu1.add_command(label="3 Space", 
+            command=lambda: self.morris.set_space('   '))
+        self.actionsubmenu1.add_command(label="/", 
+            command=lambda: self.morris.set_space('/'))
+        self.actionsubmenu1.add_command(label=":", 
+            command=lambda: self.morris.set_space(':'))
+        self.actionsubmenu1.add_command(label=";", 
+            command=lambda: self.morris.set_space(';'))
         
         self.helpmenu = tk.Menu(self.menu, tearoff=0)
         self.helpmenu.add_command(label="About", command="")
@@ -222,13 +286,16 @@ class GUI:
         self.nav_btn_frame.pack(side="right", expand="False", fill="none")
         
         # Morse
-        self.morse_btn = tk.Button(self.nav_btn_frame, text="Morse", command=self.__morse_btn_clicked__)
+        self.morse_btn = tk.Button(self.nav_btn_frame, text="Morse", 
+            command=self.__morse_btn_clicked__)
         self.morse_btn.pack(side="right", expand="False", fill="none")
         # Text
-        self.text_btn = tk.Button(self.nav_btn_frame, text="Text", command=self.__text_btn_clicked__)
+        self.text_btn = tk.Button(self.nav_btn_frame, text="Text", 
+            command=self.__text_btn_clicked__)
         self.text_btn.pack(side="right", expand="False", fill="none")
         # Clear
-        self.clear_btn = tk.Button(self.nav_btn_frame, text="Clear", command=self.__clear_btn_clicked__)
+        self.clear_btn = tk.Button(self.nav_btn_frame, text="Clear", 
+            command=self.__clear_btn_clicked__)
         self.clear_btn.pack(side="right", expand="False", fill="none")
         
     def __clear_btn_clicked__(self):
@@ -259,12 +326,4 @@ class GUI:
 if __name__ == "__main__":
     morris = GUI()
     tk.mainloop()
-    
-    m = Morris()
-    
-    morse = m.t2m("hello")
-    text = m.m2t(morse)
-    
-    print("Text: ###" + text +"###")
-    print("Morse: ###" + morse + "###")
     
