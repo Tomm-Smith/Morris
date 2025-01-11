@@ -60,8 +60,7 @@ class Morris:
             '-....' : '6',
             '--...' : '7',
             '---..' : '8',
-            '----.' : '9',
-            '   '   : ' '
+            '----.' : '9'
             }
     morse = {
             'A' : '.-',
@@ -99,8 +98,7 @@ class Morris:
             '6' : '--...',
             '7' : '---..',
             '8' : '----.',
-            '9' : '-----',
-            ' ' : '  ' # TODO: Make this formal so it doesn't adjust for trailing whitespace
+            '9' : '-----'
             }
 
     def __init__(self):
@@ -115,33 +113,36 @@ class Morris:
             return True
         
     def t2m(self, code):
-        """ t2m() - Text 2 Morse """
-        m_code = ""
-        space = ''
-        word_bool = False
+        """ t2m() - Text 2 Morse 
         
-        for char in code:
-            # TODO: Make this cleaner and less hacky
-            if word_bool and char == ' ':
-                word_bool = False
-                space = ''
-            elif not word_bool and char == ' ':
-                space = ' '
-                continue
-            else:
+            - Why does this insert a space and newline character?
+        """
+        code_len = len(code)
+        m_code = ''
+        word_space = ' / '
+        word_bool = False
+
+        for i in range(code_len):
+            if code[i] != ' ':
                 word_bool = True
-                space = ' '
+                m_code = m_code + self.morse[code[i].upper()] + " "
                 
-            # Check for valid character in dict, pass and print otherwise
-            try:
-                self.morse[char.upper()]
-            except KeyError:
-                print("DEBUG: t2m() - except KeyError: Invalid Key in dict")
+            elif word_bool and code[i] == ' ':
+                word_bool = False
+                m_code = m_code + word_space
+                
+            elif code[i] == ' ':
                 continue
-            # Append code 
+                
             else:
-                m_code = m_code + self.morse[char.upper()] + space
-            
+                print("t2m(): if-elif-else statement: else exception")
+                
+                
+        # Remove trailing space and word seperator
+        if m_code[-3:] == word_space:
+            m_code = m_code[0:-3]
+        if m_code[-1] == ' ':
+            m_code = m_code[0:-1]
             
         return m_code
         
@@ -151,29 +152,7 @@ class Morris:
         m_word = ""
         ws_bool = False
         
-        for char in code:
-            print("m2t(): morse char:" + char)
-            # Morse word terminated by white space, handle word
-            if char == ' ' and not ws_bool:
-                ws_bool = True
-                try:
-                    self.text[m_word]
-                except KeyError:
-                    print("DEBUG: m2t() - except KeyError: Invalid Key in dict" + m_word)
-                else:
-                    t_code = t_code + self.text[m_word]
-                    m_word = ''
-                
-                t_code = t_code
-            elif char == ' ' and ws_bool:
-                continue
-            # Store morris character 
-            else:
-                ws_bool = False
-                m_word = m_word + char
-
-
-        return t_code
+        
     
     def play(self, code):
         for char in code:
@@ -264,7 +243,7 @@ class GUI:
             self.text_code.insert("0.0", self.morris.m2t(morse))
             
     def __morse_btn_clicked__(self):
-        text = self.text_code.get("0.0", "end")
+        text = self.text_code.get("0.0", "end-1c")
         
         if text != '\n':
             self.morse_code.delete("0.0", "end")
