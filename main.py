@@ -128,14 +128,12 @@ class Morris:
     def t2m(self, code):
         """ t2m() - Text 2 Morse 
         
-            - Why does this insert a space and newline character?
+        
         """
-        code_len = len(code)
         m_code = ''
         word_bool = False
 
-        for i in range(code_len):
-
+        for i in range(len(code)):
             # Deal with characters
             # First whitespace after finishing a word
             if word_bool and code[i] == ' ':
@@ -143,7 +141,6 @@ class Morris:
                 # Slice off trailing space and control internally
                 m_code = m_code[0:-1]
                 
-                print(":" + self.space_char + ":")
                 if self.space_char == ' ':
                     space = ' '
                 elif self.space_char == '   ':
@@ -153,7 +150,6 @@ class Morris:
                     
                 m_code = m_code + space
                     
-                print(m_code)
             elif code[i] != ' ':
                 word_bool = True
                 # Supress KeyError exception for all other characters
@@ -182,29 +178,11 @@ class Morris:
     def m2t(self, code):
         """ m2t() - Morse 2 Text"""
         t_code = ""
-        m_word = ""
-        ws_bool = False
+        word_bool = False
         
-        for char in code:
-            print("m2t(): morse char:" + char)
-            # Morse word terminated by white space, handle word
-            if char == ' ' and not ws_bool:
-                ws_bool = True
-                try:
-                    self.text[m_word]
-                except KeyError:
-                    print("DEBUG: m2t() - except KeyError: Invalid Key in dict" + m_word)
-                else:
-                    t_code = t_code + self.text[m_word]
-                    m_word = ''
-                
-                t_code = t_code
-            elif char == ' ' and ws_bool:
-                continue
-            # Store morris character 
-            else:
-                ws_bool = False
-                m_word = m_word + char
+        #for i in range(len(code_len)):
+            
+             
 
 
         return t_code
@@ -246,19 +224,26 @@ class GUI:
             command=self.__action_play_morse_clicked__)
         self.menu.add_cascade(label="Action", menu=self.actionmenu)
         
-        self.actionsubmenu1 = tk.Menu(self.actionmenu)
+        # Whitespace character selection
+        self.actionsubmenu1 = tk.Menu(self.actionmenu, tearoff=0, 
+            postcommand=self.__whitespace_postcommand__)
         self.actionmenu.add_cascade(label="White Space Char", 
             menu=self.actionsubmenu1)
+        # NOTE: Text sensitive with __action_space_postcommand__
         self.actionsubmenu1.add_command(label="1 Space", 
-            command=lambda: self.morris.set_space(' '))
+            command=lambda: self.__whitespace_select_change__(' '))
         self.actionsubmenu1.add_command(label="3 Space", 
-            command=lambda: self.morris.set_space('   '))
+            command=lambda: self.__whitespace_select_change__('   '))
         self.actionsubmenu1.add_command(label="/", 
-            command=lambda: self.morris.set_space('/'))
+            command=lambda: self.__whitespace_select_change__('/'))
         self.actionsubmenu1.add_command(label=":", 
-            command=lambda: self.morris.set_space(':'))
+            command=lambda: self.__whitespace_select_change__(':'))
         self.actionsubmenu1.add_command(label=";", 
-            command=lambda: self.morris.set_space(';'))
+            command=lambda: self.__whitespace_select_change__(';'))
+        self.actionsubmenu1.add_command(label="?", 
+            command=lambda: self.__whitespace_select_change__('?'))
+        
+        # Colorize the Morse output
         
         self.helpmenu = tk.Menu(self.menu, tearoff=0)
         self.helpmenu.add_command(label="About", command="")
@@ -320,6 +305,48 @@ class GUI:
         morse_code = self.morse_code.get("0.0", "end")
         self.morris.play(morse_code)
 
+    def __whitespace_select_change__(self, char):
+        self.morris.set_space(char)
+        self.__morse_btn_clicked__()
+
+    def __whitespace_postcommand__(self):
+        ## Show active indicator in Whitespace Selection Dropdown
+        # Whitespace
+        if self.morris.space_char == ' ':
+            self.actionsubmenu1.entryconfig(0, label='* - 1 Space')
+        else:
+            self.actionsubmenu1.entryconfig(0, label='    1 Space')
+
+        # 3 Whitespace
+        if self.morris.space_char == '   ':
+            self.actionsubmenu1.entryconfig(1, label='* - 3 Space')
+        else:
+            self.actionsubmenu1.entryconfig(1, label='    3 Space')
+
+        # Forward Slash
+        if self.morris.space_char == '/':
+            self.actionsubmenu1.entryconfig(2, label='* - /')
+        else:
+            self.actionsubmenu1.entryconfig(2, label='    /')
+
+        # Colon
+        if self.morris.space_char == ':':
+            self.actionsubmenu1.entryconfig(3, label='* - :')
+        else:
+            self.actionsubmenu1.entryconfig(3, label='    :')
+
+        # Semicolon
+        if self.morris.space_char == ';':
+            self.actionsubmenu1.entryconfig(4, label='* - ;')
+        else:
+            self.actionsubmenu1.entryconfig(4, label='    ;')
+
+        # Question Mark
+        if self.morris.space_char == '?':
+            self.actionsubmenu1.entryconfig(5, label='* - ?')
+        else:
+            self.actionsubmenu1.entryconfig(5, label='    ?')
+            
 
 
 
