@@ -18,94 +18,47 @@ class Morris:
                 - every word be seperated by a space block ' '
                 - no word willd start with a space block
                 - last word must have a space block
+                
+        BUGS:
+            - t2m() doesn't handle newlines properly
     '''
+    text_dict = {
+        '.-'    : 'A', '-...'  : 'B', '-.-.'  : 'C', '-..'   : 'D',
+        '.'     : 'E', '..-.'  : 'F', '--.'   : 'G', '....'  : 'H',
+        '..'    : 'I', '.---'  : 'J', '-.-'   : 'K', '.-..'  : 'L',
+        '--'    : 'M', '-.'    : 'N', '---'   : 'O', '.--.'  : 'P',
+        '--.-'  : 'Q', '.-.'   : 'R', '...'   : 'S', '-'     : 'T',
+        '..-'   : 'U', '...-'  : 'V', '.--'   : 'W', '-..-'  : 'X',
+        '-.--'  : 'Y', '--..'  : 'Z',
+        '-----' : '0', '.----' : '1', '..---' : '2', '...--' : '3',
+        '....-' : '4', '.....' : '5', '-....' : '6', '--...' : '7',
+        '---..' : '8', '----.' : '9',
+        '.-.-.-': '.', '--..--': ',', '..--..': '?'
+    }
+    morse_dict = {
+        'A' : '.-',     'B' : '-...',   'C' : '-.-.',  'D' : '-..',
+        'E' : '.',      'F' : '..-.',   'G' : '--.',   'H' : '....',
+        'I' : '..',     'J' : '.---',   'K' : '-.-',   'L' : '.-..',
+        'M' : '--',     'N' : '-.',     'O' : '---',   'P' : '.--.',
+        'Q' : '--.-',   'R' : '.-.',    'S' : '...',   'T' : '-',
+        'U' : '..-',    'V' : '...-',   'W' : '.--',   'X' : '-..-',
+        'Y' : '-.--',   'Z' : '--..',
+        '0' : '.----',  '1' : '..---',  '2' : '...--', '3' : '....-',
+        '4' : '.....',  '5' : '-....',  '6' : '--...', '7' : '---..',
+        '8' : '----.',  '9' : '-----',
+        '.' : '.-.-.-', ',' : '--..--', '?' : '..--..'
+    }
+    
+    
     dot = 3
     dash = 7
     char_space = 1
     word_space = 3
     space_char = '/'
-    text = {
-            '.-'    : 'A',
-            '-...'  : 'B',
-            '-.-.'  : 'C',
-            '-..'   : 'D',
-            '.'     : 'E',
-            '..-.'  : 'F',
-            '--.'   : 'G',
-            '....'  : 'H',
-            '..'    : 'I',
-            '.---'  : 'J',
-            '-.-'   : 'K',
-            '.-..'  : 'L',
-            '--'    : 'M',
-            '-.'    : 'N',
-            '---'   : 'O',
-            '.--.'  : 'P',
-            '--.-'  : 'Q',
-            '.-.'   : 'R',
-            '...'   : 'S',
-            '-'     : 'T',
-            '..-'   : 'U',
-            '...-'  : 'V',
-            '.--'   : 'W',
-            '-..-'  : 'X',
-            '-.--'  : 'Y',
-            '--..'  : 'Z',
-            '-----' : '0',
-            '.----' : '1',
-            '..---' : '2',
-            '...--' : '3',
-            '....-' : '4',
-            '.....' : '5',
-            '-....' : '6',
-            '--...' : '7',
-            '---..' : '8',
-            '----.' : '9',
-            '.-.-.-': '.',
-            '--..--': ',',
-            '..--..': '?'
-            }
-    morse = {
-            'A' : '.-',
-            'B' : '-...',
-            'C' : '-.-.',
-            'D' : '-..',
-            'E' : '.',
-            'F' : '..-.',
-            'G' : '--.',
-            'H' : '....',
-            'I' : '..',
-            'J' : '.---',
-            'K' : '-.-',
-            'L' : '.-..',
-            'M' : '--',
-            'N' : '-.',
-            'O' : '---',
-            'P' : '.--.',
-            'Q' : '--.-',
-            'R' : '.-.',
-            'S' : '...',
-            'T' : '-',
-            'U' : '..-',
-            'V' : '...-',
-            'W' : '.--',
-            'X' : '-..-',
-            'Y' : '-.--',
-            'Z' : '--..',
-            '0' : '.----',
-            '1' : '..---',
-            '2' : '...--',
-            '3' : '....-',
-            '4' : '.....',
-            '5' : '-....',
-            '6' : '--...',
-            '7' : '---..',
-            '8' : '----.',
-            '9' : '-----',
-            '.' : '.-.-.-',
-            ',' : '--..--',
-            '?' : '..--..'
-            }
+
+    text = []
+    morse = []
+
 
     def __init__(self):
             None
@@ -125,55 +78,72 @@ class Morris:
         else:
             return True
         
-    def t2m(self, code):
-        """ t2m() - Text 2 Morse 
+    def set_text(self, text, append=False):
+        None
         
+    def set_morse(self, text, append=False):
+        None
+        
+    def t2m(self, code, string=False, append=False):
+        """ t2m() - Text 2 Morse 
+                Returns: Morse code as a list object with code separated by
+                         by whitespace(s)
+        
+            code - The text to be tranlated into Morse
+            string - True: returns the Morse in a formatted string format
+                     False: Returns the Morse data structure with characters
+                            and words separated respectively.
+                            EG. [[h, e, l, l, o], [w, o, r, l, d]]
+                            
+            NOTES:
+                - internally updates both self.text and self.morse as it encodes
+                  respectively
+            TODO:
+                - Ignore characters that are not Morse    accepted and print
         
         """
-        m_code = ''
+        if not append:
+            self.text = []
+        self.m_word = []
+        code_len = len(code)
         word_bool = False
 
-        for i in range(len(code)):
+        for i in range(code_len):
             # Deal with characters
             # First whitespace after finishing a word
             if word_bool and code[i] == ' ':
                 word_bool = False
-                # Slice off trailing space and control internally
-                m_code = m_code[0:-1]
+                self.text.append(self.m_word)
+                self.m_word = []
                 
-                if self.space_char == ' ':
-                    space = ' '
-                elif self.space_char == '   ':
-                    space = '   '
-                else:
-                    space = ' ' + self.space_char + ' '
-                    
-                m_code = m_code + space
-                    
+            # Last character
+            elif word_bool and code[i] != ' ' and i == code_len - 1:
+                word_bool = False
+                self.m_word.append(code[i])
+                self.text.append(self.m_word)
+                
             elif code[i] != ' ':
                 word_bool = True
-                # Supress KeyError exception for all other characters
-                try:
-                    # Append space to seperate morse words
-                    m_code = m_code + self.morse[code[i].upper()] + ' '
-                except KeyError:
-                    continue
+                self.m_word.append(code[i])
 
-            # Ignore all other whitespace
-            elif code[i] == ' ':
+            # Ignore; whitespace, newline
+            elif code[i] == ' ' or ord(code[i]) == 10:
                 continue
                 
             else:
                 print("t2m(): if-elif-else statement: else exception")
-                
-                
-        # Remove trailing space and word seperator
-        if m_code[-3:] == ' ' + self.space_char + ' ':
-            m_code = m_code[0:-3]
-        if m_code[-1] == ' ':
-            m_code = m_code[0:-1]
             
-        return m_code
+        # Populate self.text with data structure and encode self.morse
+        # Copy data structure from self.text
+        self.morse = self.text
+        for word in range(len(self.text)):
+            for char in range(len(self.text[word])):
+                morse = self.morse_dict[self.text[word][char].upper()]
+                self.morse[word][char] = morse
+                
+        print(self.morse)
+
+        return self.text
         
     def m2t(self, code):
         """ m2t() - Morse 2 Text"""
@@ -187,6 +157,11 @@ class Morris:
 
         return t_code
         
+    def morse_string(self):
+        """ morse_string() - Return the Morse Struct as a blob string
+        """
+        None
+    
     def play(self, code):
         for char in code:
             if char == '.':
@@ -207,6 +182,10 @@ class GUI:
         
         self.morris = Morris()
         
+        # Morse Display Color Alternation
+        self.colorize = True
+        self.even_color = "green"
+        self.odd_color = "blue"
         
         ### GUI Layout ###
         # File Menu
@@ -234,6 +213,8 @@ class GUI:
             command=lambda: self.__whitespace_select_change__(' '))
         self.actionsubmenu1.add_command(label="3 Space", 
             command=lambda: self.__whitespace_select_change__('   '))
+        self.actionsubmenu1.add_command(label="7 Space", 
+            command=lambda: self.__whitespace_select_change__('       '))
         self.actionsubmenu1.add_command(label="/", 
             command=lambda: self.__whitespace_select_change__('/'))
         self.actionsubmenu1.add_command(label=":", 
@@ -297,9 +278,13 @@ class GUI:
     def __morse_btn_clicked__(self):
         text = self.text_code.get("0.0", "end-1c")
         
+        print("__morse_btn_clicked__(): ", ord(text[-1]))
+        
         if text != '\n':
             self.morse_code.delete("0.0", "end")
             self.morse_code.insert("0.0", self.morris.t2m(text))
+            
+        #self.__colorize__(self.colorize)
         
     def __action_play_morse_clicked__(self):
         morse_code = self.morse_code.get("0.0", "end")
@@ -346,7 +331,18 @@ class GUI:
             self.actionsubmenu1.entryconfig(5, label='* - ?')
         else:
             self.actionsubmenu1.entryconfig(5, label='    ?')
-            
+
+    def __colorize__(self, state=True):
+        e_color = "green"
+        o_color = "blue"
+        
+        even = False
+        
+        # Remove color
+        if not state:
+            self.morse_code.tag_config("even", foreground="black")
+            self.morse_code.tag_config("odd", foreground="black")
+
 
 
 
