@@ -13,6 +13,11 @@ class Morris:
         Morris - A Simple Morse Code Library
         
         
+        Alphabet: A B C D E F G H I J K L M
+                  N O P Q R S T U V W X Y Z
+                  0 1 2 3 4 5 6 7 8 9
+                  . / : ; 
+        
         Notes:
             - The formatting is strict and requires:
                 - every word be seperated by a space block ' '
@@ -36,17 +41,18 @@ class Morris:
         '.-.-.-': '.', '--..--': ',', '..--..': '?'
     }
     morse_dict = {
-        'A' : '.-',     'B' : '-...',   'C' : '-.-.',  'D' : '-..',
-        'E' : '.',      'F' : '..-.',   'G' : '--.',   'H' : '....',
-        'I' : '..',     'J' : '.---',   'K' : '-.-',   'L' : '.-..',
-        'M' : '--',     'N' : '-.',     'O' : '---',   'P' : '.--.',
-        'Q' : '--.-',   'R' : '.-.',    'S' : '...',   'T' : '-',
-        'U' : '..-',    'V' : '...-',   'W' : '.--',   'X' : '-..-',
+        'A' : '.-',     'B' : '-...',   'C' : '-.-.',   'D' : '-..',
+        'E' : '.',      'F' : '..-.',   'G' : '--.',    'H' : '....',
+        'I' : '..',     'J' : '.---',   'K' : '-.-',    'L' : '.-..',
+        'M' : '--',     'N' : '-.',     'O' : '---',    'P' : '.--.',
+        'Q' : '--.-',   'R' : '.-.',    'S' : '...',    'T' : '-',
+        'U' : '..-',    'V' : '...-',   'W' : '.--',    'X' : '-..-',
         'Y' : '-.--',   'Z' : '--..',
-        '0' : '.----',  '1' : '..---',  '2' : '...--', '3' : '....-',
-        '4' : '.....',  '5' : '-....',  '6' : '--...', '7' : '---..',
+        '0' : '.----',  '1' : '..---',  '2' : '...--',  '3' : '....-',
+        '4' : '.....',  '5' : '-....',  '6' : '--...',  '7' : '---..',
         '8' : '----.',  '9' : '-----',
-        '.' : '.-.-.-', ',' : '--..--', '?' : '..--..'
+        '.' : '.-.-.-', ',' : '--..--', ":" : '−−−...', '?' : '..--..',
+        "'" : '.----.', '-' : '-....-'
     }
     
     
@@ -99,7 +105,8 @@ class Morris:
                 - internally updates both self.text and self.morse as it encodes
                   respectively
             TODO:
-                - Ignore characters that are not Morse    accepted and print
+                - Ignore characters that are not Morse accepted and print
+                - Ignore newline characters
         
         """
         if not append:
@@ -109,35 +116,35 @@ class Morris:
         word_bool = False
 
         for i in range(code_len):
-            # Deal with characters
-            # First whitespace after finishing a word
-            if word_bool and code[i] == ' ':
+            print(code[i], ":", ord(code[i]))
+                
+            # Leave word and assign word to struct
+            if word_bool and not code[i].isalnum():
                 word_bool = False
                 self.text.append(self.m_word)
                 self.m_word = []
                 
-            # Last character
-            elif word_bool and code[i] != ' ' and i == code_len - 1:
+            # Last alphanumeric character - EOF
+            elif word_bool and code[i].isalnum() and i == code_len - 1:
                 word_bool = False
                 self.m_word.append(code[i])
                 self.text.append(self.m_word)
                 
-            elif code[i] != ' ':
+            # Beginning of word
+            elif code[i].isalnum():
                 word_bool = True
                 self.m_word.append(code[i])
 
-            # Ignore; whitespace, newline
-            elif code[i] == ' ' or ord(code[i]) == 10:
-                continue
-                
+            # Ignore all else
             else:
-                print("t2m(): if-elif-else statement: else exception")
+                continue
             
-        # Populate self.text with data structure and encode self.morse
-        # Copy data structure from self.text
+        # Mirror data structure and assign
         self.morse = self.text
         for word in range(len(self.text)):
             for char in range(len(self.text[word])):
+
+                    
                 morse = self.morse_dict[self.text[word][char].upper()]
                 self.morse[word][char] = morse
                 
@@ -160,7 +167,13 @@ class Morris:
     def morse_string(self):
         """ morse_string() - Return the Morse Struct as a blob string
         """
-        None
+        morse = ""
+        
+        for word in range(len(self.morse)):
+            for char in range(len(self.morse[word])):
+                morse = morse + self.morse[word][char]
+            
+            morse = morse + self.space_char
     
     def play(self, code):
         for char in code:
@@ -212,7 +225,7 @@ class GUI:
         self.actionsubmenu1.add_command(label="1 Space", 
             command=lambda: self.__whitespace_select_change__(' '))
         self.actionsubmenu1.add_command(label="3 Space", 
-            command=lambda: self.__whitespace_select_change__('   '))
+            command=lambda: self.__whitespace_select_change__('  .'))
         self.actionsubmenu1.add_command(label="7 Space", 
             command=lambda: self.__whitespace_select_change__('       '))
         self.actionsubmenu1.add_command(label="/", 
