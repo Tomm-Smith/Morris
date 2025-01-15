@@ -16,7 +16,7 @@ class Morris:
         Alphabet: A B C D E F G H I J K L M
                   N O P Q R S T U V W X Y Z
                   0 1 2 3 4 5 6 7 8 9
-                  . / : ; 
+                  . / : ;
         
         Notes:
             - The formatting is strict and requires:
@@ -24,6 +24,8 @@ class Morris:
                 - no word willd start with a space block
                 - last word must have a space block
                 
+               
+        
         BUGS:
             - t2m() doesn't handle newlines properly
     '''
@@ -90,7 +92,7 @@ class Morris:
     def set_morse(self, text, append=False):
         None
         
-    def t2m(self, code, string=False, append=False):
+    def t2m(self, code, append=False, morse_string=True):
         """ t2m() - Text 2 Morse 
                 Returns: Morse code as a list object with code separated by
                          by whitespace(s)
@@ -148,18 +150,33 @@ class Morris:
                 morse = self.morse_dict[self.text[word][char].upper()]
                 self.morse[word][char] = morse
                 
-        print(self.morse)
-
-        return self.text
+        if morse_string:
+            return self.morse_string()
+        else:
+            return self.text
         
     def m2t(self, code):
         """ m2t() - Morse 2 Text"""
+        code_len = len(code)
         t_code = ""
+        morse_word = ''
         word_bool = False
-        
-        #for i in range(len(code_len)):
-            
-             
+
+        for i in range(code_len):
+            print(f"for i: {i} code[{i}]: {code[i]}")
+            # Deal with Morse code
+            if code[i] == '.' or code[i] == '-':
+                word_bool = True
+                morse_word = morse_word + self.text_dict(code[i])
+                
+            elif code[i] == ' ':
+                word_bool = False
+                t_code = t_code + self.text[morse_word]
+                morse_word = ''
+                
+            else:
+                continue
+                
 
 
         return t_code
@@ -168,13 +185,38 @@ class Morris:
         """ morse_string() - Return the Morse Struct as a blob string
         """
         morse = ""
+        space = '/ '
+        
+        if self.space_char == ' ':
+            self.space_char = ' '
+        elif self.space_char == '   ':
+            self.space_char = '   '
+        elif self.space_char == '       ':
+            self.space_char == '       '
+        elif self.space_char == '/':
+            self.space_char = '/ '
+        elif self.space_char == ':':
+            self.space_char = ': '
+        elif self.space_char == ';':
+            self.space_char = '; '
+        elif self.space_char == '?':
+            self.space_char = '? '
+        else:
+            self.space_char = '/'
         
         for word in range(len(self.morse)):
             for char in range(len(self.morse[word])):
                 morse = morse + self.morse[word][char]
-            
+                morse = morse + ' '
+                
             morse = morse + self.space_char
     
+        # Strip last space character from tail
+        morse = morse[0:-3]
+        
+        
+        return morse
+        
     def play(self, code):
         for char in code:
             if char == '.':
@@ -225,7 +267,7 @@ class GUI:
         self.actionsubmenu1.add_command(label="1 Space", 
             command=lambda: self.__whitespace_select_change__(' '))
         self.actionsubmenu1.add_command(label="3 Space", 
-            command=lambda: self.__whitespace_select_change__('  .'))
+            command=lambda: self.__whitespace_select_change__('   '))
         self.actionsubmenu1.add_command(label="7 Space", 
             command=lambda: self.__whitespace_select_change__('       '))
         self.actionsubmenu1.add_command(label="/", 
