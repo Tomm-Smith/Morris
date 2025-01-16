@@ -155,6 +155,9 @@ class Morris:
                 morse = self.morse_dict[self.text[word][char].upper()]
                 self.morse[word][char] = morse
                 
+                
+        print(self.morse)
+        print(self.morse_string())
         if morse_string:
             return self.morse_string()
         else:
@@ -170,53 +173,44 @@ class Morris:
         for i in range(code_len):
             print(f"for i: {i} code[{i}]: {code[i]}")
             print(f"\tmorse_word: {morse_word}")
-            # Deal with Morse code
 
-            # Deal with space character
-            if word_bool and code[i] == ' ':
-                try:
-                    # Deal with word space character
-                    # TODO: What if Morris space_char is different than the 
-                    #       provided text?
-                    if code[i+1] in self.space_chars:
-                        word_bool = False
-                        t_code = t_code + self.text_dict[morse_word] + ' '
-                        morse_word = ''
-                    
-                    # Otherwise store character
-                    else:
-                        # Ensure valid morse character
-                        try:
-                            word_bool = False
-                            t_code = t_code + self.text_dict[morse_word]
-                            morse_word = ''
-                        except KeyError:
-                            print("WARNING: m2t(): Invalid Morse character")
-                        
-                except IndexError:
-                    print(f"m2t() exception: index out of range")
-                
-            # EOF
-            elif i == code_len:
-                if code[i] in ('.', '-'):
-                    morse_word = morse_word + code[i]
-                    t_code = t_code + self.text_dict[morse_word]
-                
-            # Finish word
-            elif word_bool and code[i] not in ('.', '-'):
-                word_bool = False
-                print(morse_word)
-                try:
-                    t_code = t_code + self.text_dict[morse_word] + ' '
-                except KeyError:
-                    print("WARNING: m2t(): Invalid Morse character")
-                morse_word = ''
-                
-            # Store character
-            elif code[i] in ('.', '-'):
+
+
+            # Store character of word
+            if code[i] in ('.', '-'):
                 word_bool = True
                 morse_word = morse_word + code[i]
                 
+            # Store word (Character)
+            elif word_bool and not code[i] in ('.', '-'):
+                word_bool = False
+                t_code = t_code + self.text_dict[morse_word]
+                morse_word = ''
+                
+                # Word space character
+                try:
+                    print(f" try-except:{code[i+1]}:   space_char:{self.space_char}:")
+                    if code[i+1] == self.space_char:
+                        print("True: code[i+1] == '/'")
+                        t_code = t_code + ' '
+                    
+                    # Deal with extra space before space_char
+                    else:
+                        n = i
+                        while code[n] not in ('.', '-'):
+                            if code[n] == self.space_char:
+                                t_code = t_code + ' '
+                            n += 1
+                            
+                except IndexError:
+                    continue
+                
+            # EOF
+            elif word_bool and code[i] in ('.', '-') and i == code_len - 1:
+                morse_word = morse_word + code[i]
+                t_code = t_code + self.text_dict[code[i]]
+                    
+            # Ignore all else
             else:
                 continue
                 
@@ -227,7 +221,6 @@ class Morris:
         """ morse_string() - Return the Morse Struct as a blob string
         """
         morse = ""
-        space = '/ '
         
         if self.space_char == ' ':
             self.space_char = ' '
@@ -236,7 +229,7 @@ class Morris:
         elif self.space_char == '       ':
             self.space_char == '       '
         elif self.space_char == '/':
-            self.space_char = '/ '
+            self.space_char = '/'
         elif self.space_char == ':':
             self.space_char = ': '
         elif self.space_char == ';':
@@ -251,7 +244,7 @@ class Morris:
                 morse = morse + self.morse[word][char]
                 morse = morse + ' '
                 
-            morse = morse + self.space_char
+            morse = morse + self.space_char + ' '
     
         # Strip last space character from tail
         morse = morse[0:-3]
