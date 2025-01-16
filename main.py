@@ -63,6 +63,7 @@ class Morris:
     char_space = 1
     word_space = 3
     space_char = '/'
+    space_chars = ['/', ':', ';', '?']
 
     text = []
     morse = []
@@ -74,7 +75,11 @@ class Morris:
     def set_space(self, char):
         """ set_space(char) - Assign the internal word space character
         """
-        self.space_char = char
+        if char not in self.space_chars:
+            print("WARNING: set_space(): Provided character is not valid. Default: '/'")
+            self.space_char = '/'
+        else:
+            self.space_char = char
         
         return True
         
@@ -164,22 +169,59 @@ class Morris:
 
         for i in range(code_len):
             print(f"for i: {i} code[{i}]: {code[i]}")
+            print(f"\tmorse_word: {morse_word}")
             # Deal with Morse code
-            if code[i] == '.' or code[i] == '-':
-                word_bool = True
-                morse_word = morse_word + self.text_dict(code[i])
+
+            # Deal with space character
+            if word_bool and code[i] == ' ':
+                try:
+                    # Deal with word space character
+                    # TODO: What if Morris space_char is different than the 
+                    #       provided text?
+                    if code[i+1] in self.space_chars:
+                        word_bool = False
+                        t_code = t_code + self.text_dict[morse_word] + ' '
+                        morse_word = ''
+                    
+                    # Otherwise store character
+                    else:
+                        # Ensure valid morse character
+                        try:
+                            word_bool = False
+                            t_code = t_code + self.text_dict[morse_word]
+                            morse_word = ''
+                        except KeyError:
+                            print("WARNING: m2t(): Invalid Morse character")
+                        
+                except IndexError:
+                    print(f"m2t() exception: index out of range")
                 
-            elif code[i] == ' ':
+            # EOF
+            elif i == code_len:
+                if code[i] in ('.', '-'):
+                    morse_word = morse_word + code[i]
+                    t_code = t_code + self.text_dict[morse_word]
+                
+            # Finish word
+            elif word_bool and code[i] not in ('.', '-'):
                 word_bool = False
-                t_code = t_code + self.text[morse_word]
+                print(morse_word)
+                try:
+                    t_code = t_code + self.text_dict[morse_word] + ' '
+                except KeyError:
+                    print("WARNING: m2t(): Invalid Morse character")
                 morse_word = ''
+                
+            # Store character
+            elif code[i] in ('.', '-'):
+                word_bool = True
+                morse_word = morse_word + code[i]
                 
             else:
                 continue
                 
 
-
-        return t_code
+        return t_code.strip(" ")
         
     def morse_string(self):
         """ morse_string() - Return the Morse Struct as a blob string
@@ -333,6 +375,7 @@ class GUI:
     def __morse_btn_clicked__(self):
         text = self.text_code.get("0.0", "end-1c")
         
+        # TODO: Deal with exception of no entered text (empty Text() field)
         print("__morse_btn_clicked__(): ", ord(text[-1]))
         
         if text != '\n':
