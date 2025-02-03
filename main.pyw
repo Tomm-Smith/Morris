@@ -2,10 +2,8 @@
 
 
 import tkinter as tk
-import winsound
-from time import sleep
-
-
+from PIL import Image, ImageTk
+from math import floor
 
 
 class Morris:
@@ -16,18 +14,12 @@ class Morris:
         Alphabet: A B C D E F G H I J K L M
                   N O P Q R S T U V W X Y Z
                   0 1 2 3 4 5 6 7 8 9
-                  . / : ;
         
         Notes:
             - The formatting is strict and requires:
                 - every word be seperated by a space block ' '
-                - no word willd start with a space block
+                - no word will start with a space block
                 - last word must have a space block
-                
-               
-        
-        BUGS:
-            - t2m() doesn't handle newlines properly
     '''
     text_dict = {
         '.-'    : 'A', '-...'  : 'B', '-.-.'  : 'C', '-..'   : 'D',
@@ -39,8 +31,7 @@ class Morris:
         '-.--'  : 'Y', '--..'  : 'Z',
         '-----' : '0', '.----' : '1', '..---' : '2', '...--' : '3',
         '....-' : '4', '.....' : '5', '-....' : '6', '--...' : '7',
-        '---..' : '8', '----.' : '9',
-        '.-.-.-': '.', '--..--': ',', '..--..': '?'
+        '---..' : '8', '----.' : '9'
     }
     morse_dict = {
         'A' : '.-',     'B' : '-...',   'C' : '-.-.',   'D' : '-..',
@@ -50,11 +41,9 @@ class Morris:
         'Q' : '--.-',   'R' : '.-.',    'S' : '...',    'T' : '-',
         'U' : '..-',    'V' : '...-',   'W' : '.--',    'X' : '-..-',
         'Y' : '-.--',   'Z' : '--..',
-        '0' : '.----',  '1' : '..---',  '2' : '...--',  '3' : '....-',
-        '4' : '.....',  '5' : '-....',  '6' : '--...',  '7' : '---..',
-        '8' : '----.',  '9' : '-----',
-        '.' : '.-.-.-', ',' : '--..--', ":" : '−−−...', '?' : '..--..',
-        "'" : '.----.', '-' : '-....-'
+        '0' : '-----',  '1' : '.----',  '2' : '..---',  '3' : '...--',
+        '4' : '....-',  '5' : '.....',  '6' : '-....',  '7' : '--...',
+        '8' : '---..',  '9' : '----.'
     }
     
     
@@ -111,10 +100,6 @@ class Morris:
             NOTES:
                 - internally updates both self.text and self.morse as it encodes
                   respectively
-            TODO:
-                - Ignore characters that are not Morse accepted and print
-                - Ignore newline characters
-        
         """
         if not append:
             self.text = []
@@ -123,10 +108,13 @@ class Morris:
         word_bool = False
 
         for i in range(code_len):
-            print(code[i], ":", ord(code[i]))
+            # BUG: A single character with no trailing space won't trigger 
+            #      word_bool-isalnum() condition
+            
+            #print("t2m():", code[i], ":", ord(code[i]))
                 
             # Leave word and assign word to struct
-            if word_bool and not code[i].isalnum():
+            if word_bool and not code[i].isalnum() or word_bool and i == code_len - 1:
                 word_bool = False
                 self.text.append(self.m_word)
                 self.m_word = []
@@ -150,14 +138,10 @@ class Morris:
         self.morse = self.text
         for word in range(len(self.text)):
             for char in range(len(self.text[word])):
-
-                    
                 morse = self.morse_dict[self.text[word][char].upper()]
                 self.morse[word][char] = morse
                 
                 
-        print(self.morse)
-        print(self.morse_string())
         if morse_string:
             return self.morse_string()
         else:
@@ -171,10 +155,7 @@ class Morris:
         word_bool = False
 
         for i in range(code_len):
-            print(f"for i: {i} code[{i}]: {code[i]}")
-            print(f"\tmorse_word: {morse_word}")
-
-
+            #print("m2t():", code[i], ":", ord(code[i]))
 
             # Store character of word
             if code[i] in ('.', '-'):
@@ -189,9 +170,7 @@ class Morris:
                 
                 # Word space character
                 try:
-                    print(f" try-except:{code[i+1]}:   space_char:{self.space_char}:")
                     if code[i+1] == self.space_char:
-                        print("True: code[i+1] == '/'")
                         t_code = t_code + ' '
                     
                     # Deal with extra space before space_char
@@ -222,6 +201,7 @@ class Morris:
         """
         morse = ""
         
+        # Largely unincorporated features for future development
         if self.space_char == ' ':
             self.space_char = ' '
         elif self.space_char == '   ':
@@ -251,28 +231,17 @@ class Morris:
         
         
         return morse
-        
-    def play(self, code):
-        for char in code:
-            if char == '.':
-                winsound.Beep(700, 60 * self.dot)
-                sleep(60 * self.char_space / 1000)
-            elif char == '-':
-                winsound.Beep(700, 60 * self.dash)
-                sleep(60 * self.char_space / 1000)
-            elif char == ' ':
-                sleep(60 * self.word_space / 1000)
 
 
 class GUI:
     def __init__(self):
         self.root = tk.Tk()
         self.root.geometry("777x575")
-        #self.root.minsize(777, 575)
+        self.root.minsize(200, 200)
         
         self.morris = Morris()
         
-        # Morse Display Color Alternation
+        # TODO: Morse Display Color Alternation
         self.colorize = True
         self.even_color = "green"
         self.odd_color = "blue"
@@ -282,42 +251,11 @@ class GUI:
         self.menu = tk.Menu(self.root)
         
         self.filemenu = tk.Menu(self.menu, tearoff=0)
-        self.filemenu.add_command(label="Open", command="")
-        self.filemenu.add_command(label="Save", command="")
-        self.filemenu.add_separator()
         self.filemenu.add_command(label="Exit", command=self.root.destroy)
         self.menu.add_cascade(label="File", menu=self.filemenu)
         
-        self.actionmenu = tk.Menu(self.menu, tearoff=0)
-        self.actionmenu.add_command(label="Play Morse", 
-            command=self.__action_play_morse_clicked__)
-        self.menu.add_cascade(label="Action", menu=self.actionmenu)
-        
-        # Whitespace character selection
-        self.actionsubmenu1 = tk.Menu(self.actionmenu, tearoff=0, 
-            postcommand=self.__whitespace_postcommand__)
-        self.actionmenu.add_cascade(label="White Space Char", 
-            menu=self.actionsubmenu1)
-        # NOTE: Text sensitive with __action_space_postcommand__
-        self.actionsubmenu1.add_command(label="1 Space", 
-            command=lambda: self.__whitespace_select_change__(' '))
-        self.actionsubmenu1.add_command(label="3 Space", 
-            command=lambda: self.__whitespace_select_change__('   '))
-        self.actionsubmenu1.add_command(label="7 Space", 
-            command=lambda: self.__whitespace_select_change__('       '))
-        self.actionsubmenu1.add_command(label="/", 
-            command=lambda: self.__whitespace_select_change__('/'))
-        self.actionsubmenu1.add_command(label=":", 
-            command=lambda: self.__whitespace_select_change__(':'))
-        self.actionsubmenu1.add_command(label=";", 
-            command=lambda: self.__whitespace_select_change__(';'))
-        self.actionsubmenu1.add_command(label="?", 
-            command=lambda: self.__whitespace_select_change__('?'))
-        
-        # Colorize the Morse output
-        
         self.helpmenu = tk.Menu(self.menu, tearoff=0)
-        self.helpmenu.add_command(label="About", command="")
+        self.helpmenu.add_command(label="About", command=self.__about_me__)
         self.menu.add_cascade(label="Help", menu=self.helpmenu)
         
         self.root.config(menu=self.menu)
@@ -345,6 +283,7 @@ class GUI:
         self.morse_btn = tk.Button(self.nav_btn_frame, text="Morse", 
             command=self.__morse_btn_clicked__)
         self.morse_btn.pack(side="right", expand="False", fill="none")
+
         # Text
         self.text_btn = tk.Button(self.nav_btn_frame, text="Text", 
             command=self.__text_btn_clicked__)
@@ -353,6 +292,76 @@ class GUI:
         self.clear_btn = tk.Button(self.nav_btn_frame, text="Clear", 
             command=self.__clear_btn_clicked__)
         self.clear_btn.pack(side="right", expand="False", fill="none")
+        
+    def __about_me__(self):
+        """ Display toplevel About Me window.
+        """
+        about_x = 250
+        about_y = 300
+        
+        about = tk.Toplevel(takefocus="true")
+        # Hide first spawn point
+        about.withdraw()
+        about.update()
+        about.resizable("false", "false")
+        about.attributes("-toolwindow", True)
+        about.attributes("-topmost", True)
+
+        ### Center the about me on parent window
+        t = self.root.geometry().split("+")
+        parent_x = int(t[0].split("x")[0])
+        parent_y = int(t[0].split("x")[1])
+        
+        x_offset = int(t[1])
+        y_offset = int(t[2])
+        
+        x_geom = x_offset + ((parent_x / 2) - (about_x / 2))
+        y_geom = y_offset + ((parent_y / 2) - (about_y / 2))
+        about.geometry(f"{about_x}x{about_y}+{floor(x_geom)}+{floor(y_geom)}")
+        
+        # Show About
+        about.deiconify()
+        
+        # Naval Sailors Morse Image
+        # Double click - Open: https://www.military.com/history/the-tuskegee-airmen.html
+        image = Image.open("tuskegee-code-training.jpg")
+        # W x H
+        image.thumbnail((200, 200))
+        photo = ImageTk.PhotoImage(image)
+        
+        img = tk.Label(about, image=photo)
+        img.image = photo
+        img.pack()
+        
+        # Line Break
+        lb2 = tk.Label(about)
+        lb2.pack()
+        
+        # Version Information
+        self.ver_lbl = tk.Label(about, text="Morris v1")
+        self.ver_lbl.pack()
+        
+        desc_lbl = tk.Label(about, text="A simple Morse Code translator")
+        desc_lbl.pack()
+        
+        subver_lbl = tk.Label(about, text="1.0.0")
+        subver_lbl.pack()
+        
+        # Line Break
+        lb3 = tk.Label(about)
+        lb3.pack()
+        
+        # Author Information
+        author_lbl = tk.Label(about, text="Tom Smith", justify="left")
+        author_lbl.pack()
+        
+        email_lbl = tk.Label(about, text="Thomas.Briggs.Smith@gmail.com", 
+            justify="left")
+        email_lbl.pack()
+        
+        # Bind Events
+        #img.bind("<Double-Button-1>", 
+        #    lambda x: open("https://www.military.com/history/the-tuskegee-airmen.html"))
         
     def __clear_btn_clicked__(self):
         self.text_code.delete("0.0", "end")
@@ -367,25 +376,17 @@ class GUI:
             
     def __morse_btn_clicked__(self):
         text = self.text_code.get("0.0", "end-1c")
-        
-        # TODO: Deal with exception of no entered text (empty Text() field)
-        print("__morse_btn_clicked__(): ", ord(text[-1]))
-        
+
         if text != '\n':
             self.morse_code.delete("0.0", "end")
             self.morse_code.insert("0.0", self.morris.t2m(text))
-            
-        #self.__colorize__(self.colorize)
-        
-    def __action_play_morse_clicked__(self):
-        morse_code = self.morse_code.get("0.0", "end")
-        self.morris.play(morse_code)
 
     def __whitespace_select_change__(self, char):
         self.morris.set_space(char)
         self.__morse_btn_clicked__()
 
     def __whitespace_postcommand__(self):
+        # TODO: Incorporate more character spacing functionality
         ## Show active indicator in Whitespace Selection Dropdown
         # Whitespace
         if self.morris.space_char == ' ':
@@ -435,9 +436,6 @@ class GUI:
             self.morse_code.tag_config("odd", foreground="black")
 
 
-
-
 if __name__ == "__main__":
     morris = GUI()
     tk.mainloop()
-    
