@@ -104,23 +104,27 @@ class Morris:
         if not append:
             self.text = []
         self.m_word = []
+        # Pad a space to add a trailing processing loop TODO: Fix Hack
+        code = code + " "
         code_len = len(code)
         word_bool = False
+
 
         for i in range(code_len):
             # BUG: A single character with no trailing space won't trigger 
             #      word_bool-isalnum() condition
             
             #print("t2m():", code[i], ":", ord(code[i]))
+            #print(f"{i} : {code[i]}")
                 
             # Leave word and assign word to struct
-            if word_bool and not code[i].isalnum() or word_bool and i == code_len - 1:
+            if word_bool and not code[i].isalnum():
                 word_bool = False
                 self.text.append(self.m_word)
                 self.m_word = []
                 
             # Last alphanumeric character - EOF
-            elif word_bool and code[i].isalnum() and i == code_len - 1:
+            elif word_bool and code[i].isalnum() and i == (code_len - 1):
                 word_bool = False
                 self.m_word.append(code[i])
                 self.text.append(self.m_word)
@@ -338,7 +342,7 @@ class GUI:
         lb2.pack()
         
         # Version Information
-        self.ver_lbl = tk.Label(about, text="Morris v1")
+        self.ver_lbl = tk.Label(about, text="Morris")
         self.ver_lbl.pack()
         
         desc_lbl = tk.Label(about, text="A simple Morse Code translator")
