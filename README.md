@@ -31,7 +31,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/Tomm-Smith/Morris">
-    <img src="Morris-Example.jpg" alt="Logo" width="80" height="80">
+    <img src="Morris-Example.jpg" alt="Logo">
   </a>
 
 <h3 align="center">Morris</h3>
