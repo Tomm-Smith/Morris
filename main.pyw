@@ -20,6 +20,11 @@ class Morris:
                 - every word be seperated by a space block ' '
                 - no word will start with a space block
                 - last word must have a space block
+                
+                
+        Colorize Functionality:
+            Morris.colorize(True)
+            Morris.set_color("red", "green")
     '''
     text_dict = {
         '.-'    : 'A', '-...'  : 'B', '-.-.'  : 'C', '-..'   : 'D',
@@ -54,6 +59,19 @@ class Morris:
     space_char = '/'
     space_chars = ['/', ':', ';', '?']
 
+    # 'white', 'black', 'red', 'green', 'blue', 'cyan', 'yellow', and 'magenta'
+    colorize = False
+    first_color = "black"
+    second_color = "blue"
+    """ 
+        Text/Morse data structures for code processing and manipulation.
+        
+        TODO: Incorporate data structure into m2t()
+        
+        text = [[h, e, l, l, o], [w, o, r, l, d]]
+        morse = [['....', '.', '.-..', '.-..', '---'], 
+                 ['.--', '---', '.-.', '.-..', '-..']]
+    """
     text = []
     morse = []
 
@@ -71,7 +89,42 @@ class Morris:
             self.space_char = char
         
         return True
+    
+    def toggle_color(self, bool=False):
+        """ Toggle the colorize boolean and return the values
+        """
+        if self.colorize:
+            self.colorize = False
+        else:
+            self.colorize = True
+            
+        return self.colorize
         
+    def set_color(self, first=self.first_color, second=self.second_color):
+        """ Set the first and second colors for string hilight alternation
+        
+            TODO: set_color("first=red", "second=blue")
+        """
+        colors = ['white', 'black', 'red', 'green', 'blue', 'cyan', 'yellow', 'magenta']
+        
+        if first in colors:
+            self.first_color = first
+        else:
+            print("ERROR: Morris::set_color(): invalid first color value")
+            
+        if second in colors:
+            self.second_color = second
+        else:
+            print("ERROR: Morris::set_color(): invalid second color value")
+            
+        return True
+            
+    def get_colors(self):
+        """ Return the current colors for colorization in the format of:
+            - [colorize, color_1, color_2] - [True, 'red', 'green']
+        """
+        return [self.colorize, self.first_color, self.second_color]
+         
     def isMorse(self, char):
         try:
             self.text[char]
@@ -145,7 +198,7 @@ class Morris:
                 morse = self.morse_dict[self.text[word][char].upper()]
                 self.morse[word][char] = morse
                 
-                
+        print(self.morse)
         if morse_string:
             return self.morse_string()
         else:
@@ -205,24 +258,7 @@ class Morris:
         """
         morse = ""
         
-        # Largely unincorporated features for future development
-        if self.space_char == ' ':
-            self.space_char = ' '
-        elif self.space_char == '   ':
-            self.space_char = '   '
-        elif self.space_char == '       ':
-            self.space_char == '       '
-        elif self.space_char == '/':
-            self.space_char = '/'
-        elif self.space_char == ':':
-            self.space_char = ': '
-        elif self.space_char == ';':
-            self.space_char = '; '
-        elif self.space_char == '?':
-            self.space_char = '? '
-        else:
-            self.space_char = '/'
-        
+        # Iter data structure and cast to string
         for word in range(len(self.morse)):
             for char in range(len(self.morse[word])):
                 morse = morse + self.morse[word][char]
@@ -362,10 +398,6 @@ class GUI:
         email_lbl = tk.Label(about, text="Thomas.Briggs.Smith@gmail.com", 
             justify="left")
         email_lbl.pack()
-        
-        # Bind Events
-        #img.bind("<Double-Button-1>", 
-        #    lambda x: open("https://www.military.com/history/the-tuskegee-airmen.html"))
         
     def __clear_btn_clicked__(self):
         self.text_code.delete("0.0", "end")
