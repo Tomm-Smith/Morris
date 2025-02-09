@@ -59,10 +59,6 @@ class Morris:
     space_char = '/'
     space_chars = ['/', ':', ';', '?']
 
-    # 'white', 'black', 'red', 'green', 'blue', 'cyan', 'yellow', and 'magenta'
-    colorize = False
-    first_color = "black"
-    second_color = "blue"
     """ 
         Text/Morse data structures for code processing and manipulation.
         
@@ -78,7 +74,7 @@ class Morris:
 
     def __init__(self):
             None
-            
+
     def set_space(self, char):
         """ set_space(char) - Assign the internal word space character
         """
@@ -89,42 +85,7 @@ class Morris:
             self.space_char = char
         
         return True
-    
-    def toggle_color(self, bool=False):
-        """ Toggle the colorize boolean and return the values
-        """
-        if self.colorize:
-            self.colorize = False
-        else:
-            self.colorize = True
-            
-        return self.colorize
-        
-    def set_color(self, first=self.first_color, second=self.second_color):
-        """ Set the first and second colors for string hilight alternation
-        
-            TODO: set_color("first=red", "second=blue")
-        """
-        colors = ['white', 'black', 'red', 'green', 'blue', 'cyan', 'yellow', 'magenta']
-        
-        if first in colors:
-            self.first_color = first
-        else:
-            print("ERROR: Morris::set_color(): invalid first color value")
-            
-        if second in colors:
-            self.second_color = second
-        else:
-            print("ERROR: Morris::set_color(): invalid second color value")
-            
-        return True
-            
-    def get_colors(self):
-        """ Return the current colors for colorization in the format of:
-            - [colorize, color_1, color_2] - [True, 'red', 'green']
-        """
-        return [self.colorize, self.first_color, self.second_color]
-         
+
     def isMorse(self, char):
         try:
             self.text[char]
@@ -132,23 +93,23 @@ class Morris:
             return False
         else:
             return True
-        
+
     def set_text(self, text, append=False):
         None
-        
+
     def set_morse(self, text, append=False):
         None
-        
-    def t2m(self, code, append=False, morse_string=True):
+
+    def t2m(self, code, morse_string=True, append=False):
         """ t2m() - Text 2 Morse 
                 Returns: Morse code as a list object with code separated by
                          by whitespace(s)
         
             code - The text to be tranlated into Morse
-            string - True: returns the Morse in a formatted string format
-                     False: Returns the Morse data structure with characters
-                            and words separated respectively.
-                            EG. [[h, e, l, l, o], [w, o, r, l, d]]
+            morse_string - True: returns the Morse in a formatted string format
+                           False: Returns the Morse data structure with
+                           characters and words separated respectively.
+                           EG. [[h, e, l, l, o], [w, o, r, l, d]]
                             
             NOTES:
                 - internally updates both self.text and self.morse as it encodes
@@ -203,7 +164,7 @@ class Morris:
             return self.morse_string()
         else:
             return self.text
-        
+
     def m2t(self, code):
         """ m2t() - Morse 2 Text"""
         code_len = len(code)
@@ -252,7 +213,7 @@ class Morris:
                 
 
         return t_code.strip(" ")
-        
+
     def morse_string(self):
         """ morse_string() - Return the Morse Struct as a blob string
         """
@@ -282,40 +243,54 @@ class GUI:
         self.morris = Morris()
         
         # TODO: Morse Display Color Alternation
+        self.colors = ['white', 'black', 'red', 'green', 'blue', 
+                       'cyan', 'yellow', 'magenta']
         self.colorize = True
-        self.even_color = "green"
-        self.odd_color = "blue"
+        self.def_color = "black"
+        self.first_color = "black"
+        self.second_color = "blue"
+
         
         ### GUI Layout ###
-        # File Menu
         self.menu = tk.Menu(self.root)
         
+        ### File 
         self.filemenu = tk.Menu(self.menu, tearoff=0)
         self.filemenu.add_command(label="Exit", command=self.root.destroy)
         self.menu.add_cascade(label="File", menu=self.filemenu)
         
+        ### Tools
+        self.tools = tk.Menu(self.menu, tearoff=0)
+        self.tools.add_command(label="Colorize", command=self.__colorize__)
+        self.menu.add_cascade(label="Tools", menu=self.tools)
+        
+        ### Help
         self.helpmenu = tk.Menu(self.menu, tearoff=0)
         self.helpmenu.add_command(label="About", command=self.__about_me__)
         self.menu.add_cascade(label="Help", menu=self.helpmenu)
         
         self.root.config(menu=self.menu)
         
-        # Text Code
+        ### Text Code
         self.text_code_lbl = tk.Label(self.root, text="Text Code:")
         self.text_code_lbl.pack()
         
         self.text_code = tk.Text(self.root, height=1, width=1)
         self.text_code.pack(fill="both", expand=True)
         
-        # Morse Code
+        ### Morse Code
         self.morse_code_lbl = tk.Label(self.root, text="Morse Code:")
         self.morse_code_lbl.pack()
         
         self.morse_code = tk.Text(self.root, height=1, width=1)
         self.morse_code.pack(fill="both", expand=True)
         
+        # Color layout
+        self.morse_code.tag_config("odd", foreground=self.first_color)
+        self.morse_code.tag_config("even", foreground=self.second_color)
+        self.morse_code.tag_config("def", foreground=self.def_color)
         
-        # UI Buttons
+        ### UI Buttons
         self.nav_btn_frame = tk.Frame(self.root)
         self.nav_btn_frame.pack(side="right", expand="False", fill="none")
         
@@ -332,7 +307,7 @@ class GUI:
         self.clear_btn = tk.Button(self.nav_btn_frame, text="Clear", 
             command=self.__clear_btn_clicked__)
         self.clear_btn.pack(side="right", expand="False", fill="none")
-        
+
     def __about_me__(self):
         """ Display toplevel About Me window.
         """
@@ -398,24 +373,25 @@ class GUI:
         email_lbl = tk.Label(about, text="Thomas.Briggs.Smith@gmail.com", 
             justify="left")
         email_lbl.pack()
-        
+
     def __clear_btn_clicked__(self):
         self.text_code.delete("0.0", "end")
         self.morse_code.delete("0.0", "end")
-        
+
     def __text_btn_clicked__(self):
         morse = self.morse_code.get("0.0", "end")
         
         if morse != '\n':
             self.text_code.delete("0.0", "end")
             self.text_code.insert("0.0", self.morris.m2t(morse))
-            
+
     def __morse_btn_clicked__(self):
         text = self.text_code.get("0.0", "end-1c")
 
         if text != '\n':
             self.morse_code.delete("0.0", "end")
-            self.morse_code.insert("0.0", self.morris.t2m(text))
+            self.__colorize__()
+            self.__insert_morse_string__(self.morris.t2m(text, False))
 
     def __whitespace_select_change__(self, char):
         self.morris.set_space(char)
@@ -460,16 +436,94 @@ class GUI:
         else:
             self.actionsubmenu1.entryconfig(5, label='    ?')
 
-    def __colorize__(self, state=True):
-        e_color = "green"
-        o_color = "blue"
+    def __insert_morse_string__(self, morse):
+        """ Build the morse string with tag_config colorization and insert
+            into Text area.
+            
+                morse (data struct) - Morris data struct
+                
+            Colorization:
+                - Space characters will always remain black
+        """
+        m_word = ""
+        toggle_bool = True
         
-        even = False
+        # Iter data structure and cast to string
+        for word in range(len(morse)):
+            for char in range(len(self.morris.morse[word])):
+                m_word = m_word + self.morris.morse[word][char]
+                m_word = m_word + ' '
+            
+            if toggle_bool:
+                toggle_bool = False
+                self.morse_code.insert("end", m_word, ("def", "odd"))
+                
+            else:
+                toggle_bool = True
+                self.morse_code.insert("end", m_word, ("def", "even"))
+                
+            m_word = ""
+            self.morse_code.insert("end", self.morris.space_char + ' ')
+            
+            
+        # Strip last space character from tail
+        m_word = m_word[0:-3]
         
-        # Remove color
-        if not state:
-            self.morse_code.tag_config("even", foreground="black")
-            self.morse_code.tag_config("odd", foreground="black")
+        
+        return m_word
+
+    def __colorize__(self, state=None):
+        """ Modify the colorization of the displayed Morse code
+        
+            Returns:
+                - True | False : for the state of colorization
+        """
+        colorize = self.colorize
+        
+        # Deal with state argument, if provided
+        if state != None and state is bool:
+            if state:
+                colorize = True
+            else:
+                colorize = False
+                
+        # Otherwise toggle the current state
+        else:
+            if self.colorize:
+                colorize = True
+            else:
+                colorize = False
+                
+                
+        # Execute GUI toggle
+        if colorize:
+            self.colorize = True
+            self.morse_code.tag_lower("def")
+            
+            print(f"colorize: {self.colorize}  : tag_lower(\"def\")")
+            
+        else:
+            self.colorize = False
+            self.morse_code.tag_raise("def")
+            
+            print(f"colorize: {self.colorize}  : tag_raise(\"def\")")
+
+        return self.colorize
+
+    def set_color(self):
+        """ Set the first and second colors for string hilight alternation
+        
+            TODO: set_color("first=red", "second=blue")
+        """
+        colors = ['white', 'black', 'red', 'green', 'blue', 'cyan', 'yellow', 'magenta']
+        
+        None
+
+    def get_colors(self):
+        """ Return the current colors for colorization in the format of:
+            - [colorize, color_1, color_2] - [True, 'red', 'green']
+        """
+        return [self.colorize, self.first_color, self.second_color]
 
 
 if __name__ == "__main__":
