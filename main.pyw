@@ -246,9 +246,11 @@ class GUI:
         self.colors = ['white', 'black', 'red', 'green', 'blue', 
                        'cyan', 'yellow', 'magenta']
         self.colorize = True
+        # Default Color
         self.def_color = "black"
-        self.first_color = "red"
-        self.second_color = "blue"
+        
+        self.first_color = "black"
+        self.second_color = "red"
 
         ### GUI Layout ###
         self.menu = tk.Menu(self.root)
@@ -458,6 +460,8 @@ class GUI:
         for word in range(len(morse)):
             for char in range(len(self.morris.morse[word])):
                 m_word = m_word + self.morris.morse[word][char]
+                # FIXME: Remove/avoid the single remaining " " this will leave
+                # on the morse string
                 m_word = m_word + ' '
             
             if toggle_bool:
@@ -469,7 +473,10 @@ class GUI:
                 self.morse_code.insert("end", m_word, ("def", "even"))
                 
             m_word = ""
-            self.morse_code.insert("end", self.morris.space_char + ' ')
+            
+            # Don't append space on last character
+            if word < len(morse) - 1:
+                self.morse_code.insert("end", self.morris.space_char + ' ')
             
             
         # Strip last space character from tail
