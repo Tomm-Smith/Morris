@@ -259,8 +259,13 @@ class GUI:
         self.menu.add_cascade(label="File", menu=self.filemenu)
         
         ### Tools
+        self.gui_colorized_bool = tk.IntVar()
+        self.gui_colorized_bool.set(self.colorize)
+        
         self.tools = tk.Menu(self.menu, tearoff=0)
-        self.tools.add_command(label="Colorize", 
+
+        self.tools.add_checkbutton(label="Colorize", 
+            variable=self.gui_colorized_bool,
             command=self.__colorize_toggle__)
         self.menu.add_cascade(label="Tools", menu=self.tools)
         
@@ -479,7 +484,6 @@ class GUI:
         else:
             self.tools.entry_config(0, label="  Colorize")
             
-        
     def __colorize__(self):
         """ Modify the colorization of the displayed Morse code
         
@@ -488,11 +492,13 @@ class GUI:
         """
         # Execute GUI toggle
         if self.colorize:
+            self.gui_colorized_bool.set(True)
             self.morse_code.tag_lower("def")
             
             if debug: print(f"colorize: {self.colorize}  : tag_lower(\"def\")")
             
         else:
+            self.gui_colorized_bool.set(False)
             self.morse_code.tag_raise("def")
             
             if debug: print(f"colorize: {self.colorize}  : tag_raise(\"def\")")
@@ -502,10 +508,12 @@ class GUI:
     def __colorize_toggle__(self):
         if self.colorize:
             self.colorize = False
+            self.gui_colorized_bool.set(False)
             self.morse_code.tag_raise("def")
         
         else:
             self.colorize = True
+            self.gui_colorized_bool.set(True)
             self.morse_code.tag_lower("def")
             
         return self.colorize
