@@ -4,7 +4,7 @@
 import tkinter as tk
 from PIL import Image, ImageTk
 from math import floor
-
+debug = True
 
 class Morris:
     '''
@@ -79,7 +79,7 @@ class Morris:
         """ set_space(char) - Assign the internal word space character
         """
         if char not in self.space_chars:
-            print("WARNING: set_space(): Provided character is not valid. Default: '/'")
+            if debug: print("WARNING: set_space(): Provided character is not valid. Default: '/'")
             self.space_char = '/'
         else:
             self.space_char = char
@@ -128,8 +128,8 @@ class Morris:
             # BUG: A single character with no trailing space won't trigger 
             #      word_bool-isalnum() condition
             
-            #print("t2m():", code[i], ":", ord(code[i]))
-            #print(f"{i} : {code[i]}")
+            #if debug: print("t2m():", code[i], ":", ord(code[i]))
+            #if debug: print(f"{i} : {code[i]}")
                 
             # Leave word and assign word to struct
             if word_bool and not code[i].isalnum():
@@ -159,7 +159,7 @@ class Morris:
                 morse = self.morse_dict[self.text[word][char].upper()]
                 self.morse[word][char] = morse
                 
-        print(self.morse)
+        if debug: print(self.morse)
         if morse_string:
             return self.morse_string()
         else:
@@ -173,7 +173,7 @@ class Morris:
         word_bool = False
 
         for i in range(code_len):
-            #print("m2t():", code[i], ":", ord(code[i]))
+            #if debug: print("m2t():", code[i], ":", ord(code[i]))
 
             # Store character of word
             if code[i] in ('.', '-'):
@@ -250,7 +250,6 @@ class GUI:
         self.first_color = "black"
         self.second_color = "blue"
 
-        
         ### GUI Layout ###
         self.menu = tk.Menu(self.root)
         
