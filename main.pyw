@@ -247,7 +247,7 @@ class GUI:
                        'cyan', 'yellow', 'magenta']
         self.colorize = True
         self.def_color = "black"
-        self.first_color = "black"
+        self.first_color = "red"
         self.second_color = "blue"
 
         ### GUI Layout ###
@@ -260,7 +260,8 @@ class GUI:
         
         ### Tools
         self.tools = tk.Menu(self.menu, tearoff=0)
-        self.tools.add_command(label="Colorize", command=self.__colorize__)
+        self.tools.add_command(label="Colorize", 
+            command=self.__colorize_toggle__)
         self.menu.add_cascade(label="Tools", menu=self.tools)
         
         ### Help
@@ -288,6 +289,7 @@ class GUI:
         self.morse_code.tag_config("odd", foreground=self.first_color)
         self.morse_code.tag_config("even", foreground=self.second_color)
         self.morse_code.tag_config("def", foreground=self.def_color)
+        
         
         ### UI Buttons
         self.nav_btn_frame = tk.Frame(self.root)
@@ -471,44 +473,43 @@ class GUI:
         
         return m_word
 
-    def __colorize__(self, state=None):
+    def __colorize_postcommand__(self):
+        if self.colorize:
+            self.tools.entry_config(0, label="**Colorize")
+        else:
+            self.tools.entry_config(0, label="  Colorize")
+            
+        
+    def __colorize__(self):
         """ Modify the colorization of the displayed Morse code
         
             Returns:
                 - True | False : for the state of colorization
         """
-        colorize = self.colorize
-        
-        # Deal with state argument, if provided
-        if state != None and state is bool:
-            if state:
-                colorize = True
-            else:
-                colorize = False
-                
-        # Otherwise toggle the current state
-        else:
-            if self.colorize:
-                colorize = True
-            else:
-                colorize = False
-                
-                
         # Execute GUI toggle
-        if colorize:
-            self.colorize = True
+        if self.colorize:
             self.morse_code.tag_lower("def")
             
-            print(f"colorize: {self.colorize}  : tag_lower(\"def\")")
+            if debug: print(f"colorize: {self.colorize}  : tag_lower(\"def\")")
             
         else:
-            self.colorize = False
             self.morse_code.tag_raise("def")
             
-            print(f"colorize: {self.colorize}  : tag_raise(\"def\")")
+            if debug: print(f"colorize: {self.colorize}  : tag_raise(\"def\")")
 
         return self.colorize
 
+    def __colorize_toggle__(self):
+        if self.colorize:
+            self.colorize = False
+            self.morse_code.tag_raise("def")
+        
+        else:
+            self.colorize = True
+            self.morse_code.tag_lower("def")
+            
+        return self.colorize
+        
     def set_color(self):
         """ Set the first and second colors for string hilight alternation
         
