@@ -59,10 +59,6 @@ class Morris:
     space_char = '/'
     space_chars = ['/', ':', ';', '?']
 
-    # 'white', 'black', 'red', 'green', 'blue', 'cyan', 'yellow', and 'magenta'
-    colorize = False
-    first_color = "black"
-    second_color = "blue"
     """ 
         Text/Morse data structures for code processing and manipulation.
         
@@ -90,41 +86,6 @@ class Morris:
         
         return True
     
-    def toggle_color(self, bool=False):
-        """ Toggle the colorize boolean and return the values
-        """
-        if self.colorize:
-            self.colorize = False
-        else:
-            self.colorize = True
-            
-        return self.colorize
-        
-    def set_color(self, first=None, second=None):
-        """ Set the first and second colors for string hilight alternation
-        
-            TODO: set_color("first=red", "second=blue")
-        """
-        colors = ['white', 'black', 'red', 'green', 'blue', 'cyan', 'yellow', 'magenta']
-        
-        if first in colors:
-            self.first_color = first
-        else:
-            if debug: print("ERROR: Morris::set_color(): invalid first color value")
-            
-        if second in colors:
-            self.second_color = second
-        else:
-            if debug: print("ERROR: Morris::set_color(): invalid second color value")
-            
-        return True
-            
-    def get_colors(self):
-        """ Return the current colors for colorization in the format of:
-            - [colorize, color_1, color_2] - [True, 'red', 'green']
-        """
-        return [self.colorize, self.first_color, self.second_color]
-         
     def isMorse(self, char):
         try:
             self.text[char]
@@ -280,11 +241,6 @@ class GUI:
         self.root.minsize(200, 200)
         
         self.morris = Morris()
-        
-        # TODO: Morse Display Color Alternation
-        self.colorize = True
-        self.even_color = "green"
-        self.odd_color = "blue"
         
         ### GUI Layout ###
         # File Menu
@@ -459,17 +415,6 @@ class GUI:
             self.actionsubmenu1.entryconfig(5, label='* - ?')
         else:
             self.actionsubmenu1.entryconfig(5, label='    ?')
-
-    def __colorize__(self, state=True):
-        e_color = "green"
-        o_color = "blue"
-        
-        even = False
-        
-        # Remove color
-        if not state:
-            self.morse_code.tag_config("even", foreground="black")
-            self.morse_code.tag_config("odd", foreground="black")
 
 
 if __name__ == "__main__":
