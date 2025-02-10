@@ -237,8 +237,8 @@ class Morris:
 class GUI:
     def __init__(self):
         self.root = tk.Tk()
-        self.root.geometry("777x575")
-        self.root.minsize(200, 200)
+        self.root.geometry("642x399")
+        self.root.minsize(400, 200)
         
         self.morris = Morris()
         

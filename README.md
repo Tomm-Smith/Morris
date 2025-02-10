@@ -1,4 +1,9 @@
-# Morris
+<!--
+References:
+ - https://github.com/othneildrew/Best-README-Template
+-->
+<a id="readme-top"></a>
+# Morris v1.1
 <p align="center">
   <img src="Morris-Example.jpg" alt="Morris GUI Example">
 </p>
@@ -15,10 +20,12 @@ Morris is designed to be a lightweight, intuitive, and feature rich Morse Code t
 
 
 ## :triangular_ruler: Plans
+- [x] Colorize Morse code output with feature toggle
 - [ ] Replay audible Morse code, with code block hilighting<br />
 - [ ] Support dynamic code formatting options<br />
 - [ ] Full ASCII character incorporation with interface toggle<br />
 - [ ] Broadcast over radio frequency with reception<br />
+- [ ] Persistent settings
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
