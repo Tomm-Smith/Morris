@@ -1,15 +1,14 @@
 #!/usr/bin/env python
 
-
 import tkinter as tk
 from PIL import Image, ImageTk
 from math import floor
-debug = True
+debug = False
+
 
 class Morris:
     '''
         Morris - A Simple Morse Code Library
-        
         
         Alphabet: A B C D E F G H I J K L M
                   N O P Q R S T U V W X Y Z
@@ -20,11 +19,6 @@ class Morris:
                 - every word be seperated by a space block ' '
                 - no word will start with a space block
                 - last word must have a space block
-                
-                
-        Colorize Functionality:
-            Morris.colorize(True)
-            Morris.set_color("red", "green")
     '''
     text_dict = {
         '.-'    : 'A', '-...'  : 'B', '-.-.'  : 'C', '-..'   : 'D',
@@ -50,8 +44,7 @@ class Morris:
         '4' : '....-',  '5' : '.....',  '6' : '-....',  '7' : '--...',
         '8' : '---..',  '9' : '----.'
     }
-    
-    
+
     dot = 3
     dash = 7
     char_space = 1
@@ -61,8 +54,6 @@ class Morris:
 
     """ 
         Text/Morse data structures for code processing and manipulation.
-        
-        TODO: Incorporate data structure into m2t()
         
         text = [[h, e, l, l, o], [w, o, r, l, d]]
         morse = [['....', '.', '.-..', '.-..', '---'], 
@@ -102,14 +93,11 @@ class Morris:
 
     def t2m(self, code, morse_string=True, append=False):
         """ t2m() - Text 2 Morse 
-                Returns: Morse code as a list object with code separated by
-                         by whitespace(s)
+                Returns: A Morris data structure, False otherwise
         
             code - The text to be tranlated into Morse
             morse_string - True: returns the Morse in a formatted string format
-                           False: Returns the Morse data structure with
-                           characters and words separated respectively.
-                           EG. [[h, e, l, l, o], [w, o, r, l, d]]
+                           False: Returns a Morris data structure
                             
             NOTES:
                 - internally updates both self.text and self.morse as it encodes
@@ -118,7 +106,7 @@ class Morris:
         if not append:
             self.text = []
         self.m_word = []
-        # Pad a space to add a trailing processing loop TODO: Fix Hack
+        # Pad a space to add a trailing processing loop TODO: Proper solution?
         code = code + " "
         code_len = len(code)
         word_bool = False
@@ -126,10 +114,10 @@ class Morris:
 
         for i in range(code_len):
             # BUG: A single character with no trailing space won't trigger 
-            #      word_bool-isalnum() condition
+            #      word_bool-isalnum() condition with trailing whitespace
             
-            #if debug: print("t2m():", code[i], ":", ord(code[i]))
-            #if debug: print(f"{i} : {code[i]}")
+            if debug: print("t2m():", code[i], ":", ord(code[i]))
+            if debug: print(f"{i} : {code[i]}")
                 
             # Leave word and assign word to struct
             if word_bool and not code[i].isalnum():
@@ -159,7 +147,7 @@ class Morris:
                 morse = self.morse_dict[self.text[word][char].upper()]
                 self.morse[word][char] = morse
                 
-        if debug: print(self.morse)
+        if debug: print(f"Morris:t2m() (data struct): {self.morse}")
         if morse_string:
             return self.morse_string()
         else:
@@ -173,7 +161,7 @@ class Morris:
         word_bool = False
 
         for i in range(code_len):
-            #if debug: print("m2t():", code[i], ":", ord(code[i]))
+            if debug: print("m2t():", code[i], ":", ord(code[i]))
 
             # Store character of word
             if code[i] in ('.', '-'):
@@ -367,7 +355,7 @@ class GUI:
         desc_lbl = tk.Label(about, text="A simple Morse Code translator")
         desc_lbl.pack()
         
-        subver_lbl = tk.Label(about, text="1.0.0")
+        subver_lbl = tk.Label(about, text="1.1.0")
         subver_lbl.pack()
         
         # Line Break
@@ -490,7 +478,7 @@ class GUI:
             self.tools.entry_config(0, label="**Colorize")
         else:
             self.tools.entry_config(0, label="  Colorize")
-            
+
     def __colorize__(self):
         """ Modify the colorization of the displayed Morse code
         
@@ -524,7 +512,7 @@ class GUI:
             self.morse_code.tag_lower("def")
             
         return self.colorize
-        
+
     def set_color(self):
         """ Set the first and second colors for string hilight alternation
         
