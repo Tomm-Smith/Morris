@@ -23,7 +23,6 @@ Morris is designed to be a lightweight, intuitive, and feature rich Morse Code t
 - [x] Colorize Morse code output with feature toggle
 - [ ] Replay audible Morse code, with code block hilighting<br />
 - [ ] Support dynamic code formatting options<br />
-- [ ] Full ASCII character incorporation with interface toggle<br />
 - [ ] Broadcast over radio frequency with reception<br />
 - [ ] Persistent settings
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
