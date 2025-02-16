@@ -20,11 +20,13 @@ Morris is designed to be a lightweight, intuitive, and feature rich Morse Code t
 
 
 ## :triangular_ruler: Plans
-- [x] Colorize Morse code output with feature toggle
-- [ ] Replay audible Morse code, with code block hilighting<br />
-- [ ] Support dynamic code formatting options<br />
-- [ ] Broadcast over radio frequency with reception<br />
-- [ ] Persistent settings
+
+- [x] [Colorize Morse Code Output #8](https://github.com/Tomm-Smith/Morris/issues/8)
+- [ ] [Colorize Options for Display #10](https://github.com/Tomm-Smith/Morris/issues/10)
+- [ ] [Persistent Settings #7](https://github.com/Tomm-Smith/Morris/issues/7)
+- [ ] [Dynamic Code Formatting #6](https://github.com/Tomm-Smith/Morris/issues/6)
+- [ ] [Replay Audible Morse Code #5](https://github.com/Tomm-Smith/Morris/issues/5)
+- [ ] [Menu Option for Rapid Alphabet Clear Text #4](https://github.com/Tomm-Smith/Morris/issues/4)
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
