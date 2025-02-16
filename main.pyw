@@ -3,8 +3,9 @@
 import tkinter as tk
 from PIL import Image, ImageTk
 from math import floor
-debug = False
 
+debug = False
+version = "1.0.5"
 
 class Morris:
     '''
@@ -355,7 +356,7 @@ class GUI:
         desc_lbl = tk.Label(about, text="A simple Morse Code translator")
         desc_lbl.pack()
         
-        subver_lbl = tk.Label(about, text="1.1.0")
+        subver_lbl = tk.Label(about, text=version)
         subver_lbl.pack()
         
         # Line Break

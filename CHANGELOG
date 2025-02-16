@@ -7,10 +7,18 @@ Morris is designed to be a lightweight, intuitive, and feature rich Morse Code t
 The following includes the changes made along the development branching of revision.
 
 
-## [Unreleased] - 
+## [1.0.5] - 2025-02-16
+
+### Added
+
+- Global version variable to conveniently display updating version
+
+### Changed
+
+- GUI::__about_me__(): To display current Morris version using global version
 
 
-## [1.0.4 (Stable Release)] - 2025-02-16
+## [1.0.4] - 2025-02-16
 
 ### Added
 - CHANGELOG to document revisions of Morris branching
@@ -246,7 +254,7 @@ The following includes the changes made along the development branching of revis
 - GUI layout
 
 
-[1.0.4]: https://github.com/Tomm-Smith/Morris
+[1.0.4]: https://github.com/Tomm-Smith/Morris/commit/d2ce5bdc92ac0d5f2ad315f3e1b120c7da18fccf
 [0.9.4]: https://github.com/Tomm-Smith/Morris/commit/b6abc11032fffa2e1452666d3a563f66ae4e7c1d
 [0.9.1]: https://github.com/Tomm-Smith/Morris/commit/cdd9017dbe283e0ad996e63dcfd1f52f9500bd5f
 [0.8.1]: https://github.com/Tomm-Smith/Morris/commit/da28153b63b457ddcd7495f41d9a9681817312d5
