@@ -3,7 +3,7 @@ References:
  - https://github.com/othneildrew/Best-README-Template
 -->
 <a id="readme-top"></a>
-# Morris v1.0.6 [Stable]
+# Morris v1.0.7 [Stable]
 <p align="center">
   <img src="Morris-Example.jpg" alt="Morris GUI Example">
 </p>
@@ -31,7 +31,7 @@ Morris is designed to be a lightweight, intuitive, and feature rich Morse Code t
 
 
 ## :memo: License
-Morris resides under the free canopy of the GPL v3. See [LICENSE](/LICENSE) for more information.
+Morris resides under the free canopy of the GNU GPL v3. See [LICENSE](/LICENSE) for more information.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 

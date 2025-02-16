@@ -5,7 +5,7 @@ from PIL import Image, ImageTk
 from math import floor
 
 debug = False
-version = "1.0.6"
+version = "1.0.7"
 
 class Morris:
     '''
