@@ -3,7 +3,7 @@ References:
  - https://github.com/othneildrew/Best-README-Template
 -->
 <a id="readme-top"></a>
-# Morris v1.0.5
+# Morris v1.0.6 [Stable]
 <p align="center">
   <img src="Morris-Example.jpg" alt="Morris GUI Example">
 </p>

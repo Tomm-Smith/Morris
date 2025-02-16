@@ -7,6 +7,13 @@ Morris is designed to be a lightweight, intuitive, and feature rich Morse Code t
 The following includes the changes made along the development branching of revision.
 
 
+## [1.0.6] - 2025-02-16
+
+### Changed
+
+- README.md - Added "[Stable]" release branch to Title
+
+
 ## [1.0.5] - 2025-02-16
 
 ### Added
@@ -253,7 +260,7 @@ The following includes the changes made along the development branching of revis
 - Morse code clear text and cipher text translation dictionary
 - GUI layout
 
-
+[1.0.5]: https://github.com/Tomm-Smith/Morris/commit/a0b8311dce292b0b7732c795f0a3f9854c08977c
 [1.0.4]: https://github.com/Tomm-Smith/Morris/commit/d2ce5bdc92ac0d5f2ad315f3e1b120c7da18fccf
 [0.9.4]: https://github.com/Tomm-Smith/Morris/commit/b6abc11032fffa2e1452666d3a563f66ae4e7c1d
 [0.9.1]: https://github.com/Tomm-Smith/Morris/commit/cdd9017dbe283e0ad996e63dcfd1f52f9500bd5f
