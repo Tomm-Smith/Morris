@@ -1,0 +1,265 @@
+[Keep a Changelog](https://keepachangelog.com/)
+[Semantic Versioning](https://semver.org/spec/v2.0.0.html)
+
+# Morris (https://github.com/Tomm-Smith/Morris)
+
+Morris is designed to be a lightweight, intuitive, and feature rich Morse Code translation utility.
+The following includes the changes made along the development branching of revision.
+
+
+## [Unreleased] - 
+
+
+## [1.0.4 (Stable Release)] - 2025-02-16
+
+### Added
+- CHANGELOG to document revisions of Morris branching
+
+
+## [0.9.4] - 2025-02-16
+
+### Changed
+
+- Global debug variable to default (False) on Stable release branch
+- Pruned comments and code spacing
+- Updated README.md to reflect accurate plans checklist (with GitHub Enchancement links)
+
+### Removed
+
+- tone_generator.py - Stray experimental code from early stage development
+- "Full ASCII character incorporation" checklist box from README.md
+
+
+## [0.9.1] - 2025-02-09
+
+### Added
+
+- File Menu > Tools 
+- File Menu > Tools > Colorize [check] (Toggling function)
+- GUI tag_config color schema to __init__()
+- GUI::__colorize_postcommand__()
+- GUI::__colorize__()
+- GUI::__colorize_toggle__()
+- GUI::__set_color__()
+- GUI::__get_colors__()
+
+### Changed
+
+- GUI::__init__(): Defined Public GUI colorization variables
+- Removed trailing space character from Morse code output
+- Resized parent window default and minimum size definition
+- Morris-Example.jpg to include colorization example
+- README.md: Updated Plans checklist to close bug #1 and add (unfinished) "Persistent settings"
+
+
+## [0.8.1] - 2025-02-09
+
+### Added
+- Development branch Colorization
+
+### Changed
+- Master branch structure to include Dev branch
+
+### Removed
+- All colorization code from branch Master
+
+
+## [0.9.1] - 2025-02-09
+
+### Added
+
+- Global debug boolean for easily controlling debug information output
+
+
+## [0.9.0] - 2025-02-09
+
+### Added
+
+- Added for migration of Morse code color handling in GUI() Private scope
+  - GUI::__insert_morse_string__(): Build the Morse string with tag_config colorization
+  - GUI::__colorize__(): Modify the colorization of the displayed Morse code
+  - GUI::set_color(): Set the alternation colors for colorization
+  - GUI::get_colors(): Return the alternation colors for colorization
+- File Menu > Tools
+- Tools > Colorize: Colorization toggle (Default: Colorize)
+- GUI::__init__(): tag_config schema for colorization control
+
+### Changed
+
+- Morris::isMorse() - Simple try-except dictionary reference for boolean return
+- Morris::t2m() - Method argument reorder: t2m(morse_string=True, append=False)
+- GUI::__init__(): - Colorization Defaults added
+- GUI::__morse_btn_clicked__(): GUI::__colorization__() pre-processing
+
+### Removed
+
+- Removed for migration of Morse code color handling to Global scope:
+  - Morris::toggle_color()
+  - Morris::set_color()
+  - Morris::get_colors()
+
+
+## [0.8.7] - 2025-02-09
+
+### Added
+
+- Morris-Example.jpg - Used in project documentation
+- README.md
+- Modular README.md supporting scripts
+- Added simple README.md as beginning of clean README.md documentation
+
+### Changed
+
+- FIXED BUG #1: Morris now properly processes single characters
+- Moved GPL.txt to LICENSE for generalized cleanliness of code structure
+- Naming conventions
+- Pruned: typos, excess code/comments, general housekeeping
+- Stray colorization code lingers through stable branch
+- Updated Morris-Example.jpg: Resize
+
+### Removed
+
+- Modular README.md supporting scripts
+
+
+## [0.7.0] - 2025-02-05
+
+### Added
+
+- GPL.txt - Introduction of GPL Licensing
+
+
+## [0.6.0] - 2025-02-03
+
+### Added
+- Help > About Me - File menu option
+- GUI:__about_me__() - TopLevel Tkinter window for about me info
+- Tuskegee Airmen jpg for use in About Me
+- README.txt
+
+### Changed
+
+- Renamed main.py to main.pyw
+
+### Removed
+
+- sound.py - Early stage experimentation that isn't needed in branch
+- header.py - text_dict and morse_dict integrated in main.py, Morris(), and structured
+
+
+## [0.5.0] - 2025-01-16
+
+### Changed
+
+- Space character handling in t2m() which includes:
+    - Ignoring all extra space / invalid characters other than " " that seperates words
+    - Properly padding the output for systematic spacing
+    - Truncating the remaining " / " character due to manner of process loop (BUG)
+    - Leaves harmless remaining " " that may be removed in later releases
+
+
+## [0.4.1] - 2025-01-14
+
+### Added
+
+- Morris::set_text() - Set text code from Global scope
+- Morris::set_morse() - Set Morse code from Global scope
+- Morris::morse_string() - Convert Morse Struct to char string
+- __colorize__() - Stray branch element, early introduction
+
+### Changed
+
+- Morris class will be renamed Zach in releases following Unreleased Master (2025-02-16)
+- Converted Morris (Zach) Morse code handling to data structure
+- Restructured Morris::t2m() into data structure default with local string code construction
+
+
+## [0.3.4] - 2025-01-12
+
+### Added
+
+- Following space character processing methods
+  - __whitespace_select_change__()
+  - __whitespace_postcommand__()
+
+
+## [0.3.3] - 2025-01-11
+
+### Added
+
+- Space and extra ASCII characters to Morse dictionary
+- Action menu: "Whitespace Char" dropdown for space character selection
+
+### Changed
+
+- Morris::t2m(): Morse code word space " / " seperator
+- Morris::set_space(): Define space character in Morris library
+- Next steps in proper, complete spacing and invalid character handling
+
+### Removed
+
+- Whitespace character from Morse dictionary
+
+
+## [0.3.2] - 2025-01-05
+
+### Added
+
+- Morris::Play() - Morse sound using winsound.Beep() (Requires threading)
+- Morris::isMorse() - Expanding Morris functionality for code handling
+- Introduced character space handling code structure
+
+### Changed
+
+- File menu structure to include Action: Play Morse, Whitespace Char
+
+
+## [0.2.1] - 2025-01-04
+
+### Added
+
+- Began properly handling extra whitespace and invalid characters
+- File menu
+
+### Changed
+
+- Revised Morse dictionary layout
+
+
+## [0.1.0] - 2025-01-04
+
+### Added
+
+- Morris class
+- GUI Class
+
+### Changed
+
+- GUI layout to formal structure
+
+
+## [0.0.1] - 2025-01-04
+
+### Added
+
+- Morse code clear text and cipher text translation dictionary
+- GUI layout
+
+
+[1.0.4]: https://github.com/Tomm-Smith/Morris
+[0.9.4]: https://github.com/Tomm-Smith/Morris/commit/b6abc11032fffa2e1452666d3a563f66ae4e7c1d
+[0.9.1]: https://github.com/Tomm-Smith/Morris/commit/cdd9017dbe283e0ad996e63dcfd1f52f9500bd5f
+[0.8.1]: https://github.com/Tomm-Smith/Morris/commit/da28153b63b457ddcd7495f41d9a9681817312d5
+[0.9.1]: https://github.com/Tomm-Smith/Morris/commit/0af16b86ae8f06de5d621f33186ac33529956ea1
+[0.9.0]: https://github.com/Tomm-Smith/Morris/commit/c0528d7be4ea59044dd552b2a9ff02831bba6995
+[0.8.7]: https://github.com/Tomm-Smith/Morris/commit/e8088184470956a37bbec2fbb23affc6f158efdc
+[0.7.0]: https://github.com/Tomm-Smith/Morris/commit/90998d642e7f0650a449a0c4cfdf9c1f169895f6
+[0.6.0]: https://github.com/Tomm-Smith/Morris/commit/c328f342d985ba9abe39c2a9be528ceb510915fe
+[0.5.0]: https://github.com/Tomm-Smith/Morris/commit/53fc92b931a79b08c6e374c683efae2a4c7abc3b
+[0.4.1]: https://github.com/Tomm-Smith/Morris/commit/b6226e32ed117890bb81c2f925be1240fd6438e2
+[0.3.4]: https://github.com/Tomm-Smith/Morris/commit/42f53ea159566b47be6fba3dc23a80c272da131a
+[0.3.3]: https://github.com/Tomm-Smith/Morris/commit/27f12cd431fe358a40f10451fcd700f616d577d0
+[0.3.2]: https://github.com/Tomm-Smith/Morris/commit/719325f15f85cdf63217f9dcad01310011d89903
+[0.2.1]: https://github.com/Tomm-Smith/Morris/commit/cc0173d1f90e58b7ba7a6425253c5fc563c147fb
+[0.1.0]: https://github.com/Tomm-Smith/Morris/commit/a4a45420be885942797c42d4e2692c3e1e4a0ec8
+[0.0.1]: https://github.com/Tomm-Smith/Morris/commit/0db1ac66db9abb31267fae0a84cf2238d11a7d52
