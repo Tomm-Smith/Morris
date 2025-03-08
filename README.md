@@ -3,7 +3,7 @@ References:
  - https://github.com/othneildrew/Best-README-Template
 -->
 <a id="readme-top"></a>
-# Morris v1.0.7 [Stable]
+# Morris v1.1.1 [Stable]
 <p align="center">
   <img src="Morris-Example.jpg" alt="Morris GUI Example">
 </p>
@@ -23,7 +23,7 @@ Morris is designed to be a lightweight, intuitive, and feature rich Morse Code t
 
 - [x] Colorize Morse Code Output [#8](https://github.com/Tomm-Smith/Morris/issues/8)
 - [ ] Colorize Options for Display [#10](https://github.com/Tomm-Smith/Morris/issues/10)
-- [ ] Persistent Settings [#7](https://github.com/Tomm-Smith/Morris/issues/7)
+- [x] Persistent Settings [#7](https://github.com/Tomm-Smith/Morris/issues/7)
 - [ ] Dynamic Code Formatting [#6](https://github.com/Tomm-Smith/Morris/issues/6)
 - [ ] Replay Audible Morse Code [#5](https://github.com/Tomm-Smith/Morris/issues/5)
 - [ ] Menu Option for Rapid Alphabet Clear Text [#4](https://github.com/Tomm-Smith/Morris/issues/4)

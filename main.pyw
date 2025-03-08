@@ -1,11 +1,95 @@
 #!/usr/bin/env python
 
+import os
 import tkinter as tk
 from PIL import Image, ImageTk
 from math import floor
+import pickle
+import webbrowser
 
 debug = False
-version = "1.0.7"
+version = "1.1.1"
+
+class Settings:
+    """Data Object to store persistant settings structure
+    
+        All persistant settings must be declared in this object otherwise
+        they will be considered local volatille.
+        
+        Behavior:
+         - Settings loaded take precedence to defaults
+    """
+    value = {'colorize'     : True,
+             'first_color'  : 'black',
+             'second_color' : 'red'
+    }
+    
+    def __init__(self, file):
+        self.file = file
+
+        if self.__is_file__():
+            self.load()
+
+    def __is_file__(self):
+        try:
+            os.stat(self.file)
+            
+        except FileNotFoundError:
+            if debug:
+                print(f"ERROR: GUI::is_file(): Persistant file does not exist: {self.file}")
+        
+            return False
+            
+        return True
+
+    def load(self):
+        """ load() - Load persistant settings from dataObj
+        
+        TODO: 
+         - Sanitize data for security protection of injection 
+        """
+        if self.__is_file__():
+            fd = open(self.file, "rb")
+            settings_dict = pickle.load(fd)
+            fd.close()
+            
+            self.value = settings_dict
+            return True
+
+    def save(self):
+        fd = open(self.file, "wb")
+        pickle.dump(self.value, fd)
+        fd.close()
+        
+        return True
+
+    def get(self, setting):
+        """ get() - Return the value of the requested setting
+        
+            Returns:
+                - Value upon valid setting existence
+                - None otherwise
+        """
+        None
+
+    def set(self, **kwargs):
+        if kwargs == {}:
+            if debug:
+                print(f"GUI::set_setting: arguments required, none given: {kwargs}")
+                
+            return False
+            
+        for arg in kwargs:
+            try:
+                self.settings[arg] = kwargs[arg]
+                
+            except:
+                if debug:
+                    print("GUI::set_setting: kwargs unhandled exception.")
+                    
+                    
+        return self.save()
+
 
 class Morris:
     '''
@@ -225,21 +309,27 @@ class Morris:
 
 class GUI:
     def __init__(self):
-        self.root = tk.Tk()
-        self.root.geometry("642x399")
-        self.root.minsize(400, 200)
-        
-        self.morris = Morris()
-        
+        """ Morris GUI Definitions
+
+        """
+        self.settings = Settings("settings")
+        self.settings.load()
+
         # TODO: Morse Display Color Alternation
         self.colors = ['white', 'black', 'red', 'green', 'blue', 
                        'cyan', 'yellow', 'magenta']
-        self.colorize = True
         # Default Color
         self.def_color = "black"
         
         self.first_color = "black"
         self.second_color = "red"
+        
+        
+        self.root = tk.Tk()
+        self.root.geometry("642x399")
+        self.root.minsize(400, 200)
+        
+        self.morris = Morris()
 
         ### GUI Layout ###
         self.menu = tk.Menu(self.root)
@@ -251,8 +341,8 @@ class GUI:
         
         ### Tools
         self.gui_colorized_bool = tk.IntVar()
-        self.gui_colorized_bool.set(self.colorize)
-        
+        self.gui_colorized_bool.set(self.settings.value['colorize'])
+
         self.tools = tk.Menu(self.menu, tearoff=0)
 
         self.tools.add_checkbutton(label="Colorize", 
@@ -305,11 +395,12 @@ class GUI:
             command=self.__clear_btn_clicked__)
         self.clear_btn.pack(side="right", expand="False", fill="none")
 
+    """UI Methods"""
     def __about_me__(self):
         """ Display toplevel About Me window.
         """
         about_x = 250
-        about_y = 300
+        about_y = 330
         
         about = tk.Toplevel(takefocus="true")
         # Hide first spawn point
@@ -335,7 +426,6 @@ class GUI:
         about.deiconify()
         
         # Naval Sailors Morse Image
-        # Double click - Open: https://www.military.com/history/the-tuskegee-airmen.html
         image = Image.open("tuskegee-code-training.jpg")
         # W x H
         image.thumbnail((200, 200))
@@ -370,6 +460,13 @@ class GUI:
         email_lbl = tk.Label(about, text="Thomas.Briggs.Smith@gmail.com", 
             justify="left")
         email_lbl.pack()
+        
+        github_link = tk.Label(about, 
+            text="https://github.com/Tomm-Smith/Morris", justify="left", 
+            foreground="blue", cursor="hand2")
+        github_link.pack()
+        github_link.bind("<Button-1>", 
+            lambda x : webbrowser.open("https://github.com/Tomm-Smith/Morris"))
 
     def __clear_btn_clicked__(self):
         self.text_code.delete("0.0", "end")
@@ -474,8 +571,27 @@ class GUI:
         
         return m_word
 
+
+        if kwargs == {}:
+            if debug:
+                print(f"GUI::set_setting: arguments required, none given: {kwargs}")
+                
+            return False
+            
+        for arg in kwargs:
+            try:
+                self.settings.arg = kwargs[arg]
+                
+            except:
+                if debug:
+                    print("GUI::set_setting: kwargs try-except exception.")
+                    
+                    
+        return self.save_settings(self.settings)
+
+    """Colorization"""
     def __colorize_postcommand__(self):
-        if self.colorize:
+        if self.settings.colorize:
             self.tools.entry_config(0, label="**Colorize")
         else:
             self.tools.entry_config(0, label="  Colorize")
@@ -485,34 +601,40 @@ class GUI:
         
             Returns:
                 - True | False : for the state of colorization
+                
+            TODO: 
+              - Add exception handling for self.settings.value['colorize'] if 
+                element does not exist in dictionary
         """
         # Execute GUI toggle
-        if self.colorize:
+        if self.settings.value['colorize']:
             self.gui_colorized_bool.set(True)
             self.morse_code.tag_lower("def")
             
-            if debug: print(f"colorize: {self.colorize}  : tag_lower(\"def\")")
+            if debug: print(f"colorize: {self.settings.value['colorize']}  : tag_lower(\"def\")")
             
         else:
             self.gui_colorized_bool.set(False)
             self.morse_code.tag_raise("def")
             
-            if debug: print(f"colorize: {self.colorize}  : tag_raise(\"def\")")
+            if debug: print(f"colorize: {self.settings.value['colorize']}  : tag_raise(\"def\")")
 
-        return self.colorize
+        return self.settings.value['colorize']
 
     def __colorize_toggle__(self):
-        if self.colorize:
-            self.colorize = False
+        if self.settings.value['colorize']:
+            self.settings.value['colorize'] = False
             self.gui_colorized_bool.set(False)
             self.morse_code.tag_raise("def")
         
         else:
-            self.colorize = True
+            self.settings.value['colorize'] = True
             self.gui_colorized_bool.set(True)
             self.morse_code.tag_lower("def")
             
-        return self.colorize
+        self.settings.save()
+        
+        return self.settings.value['colorize']
 
     def set_color(self):
         """ Set the first and second colors for string hilight alternation
@@ -527,7 +649,7 @@ class GUI:
         """ Return the current colors for colorization in the format of:
             - [colorize, color_1, color_2] - [True, 'red', 'green']
         """
-        return [self.colorize, self.first_color, self.second_color]
+        return [self.settings.colorize, self.first_color, self.second_color]
 
 
 if __name__ == "__main__":

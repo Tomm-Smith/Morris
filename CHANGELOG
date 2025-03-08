@@ -3,8 +3,27 @@
 
 # Morris (https://github.com/Tomm-Smith/Morris)
 
-Morris is designed to be a lightweight, intuitive, and feature rich Morse Code translation utility.
-The following includes the changes made along the development branching of revision.
+Morris is designed to be a lightweight, intuitive, and feature rich Morse Code
+translation utility. The following includes the changes made along the
+development branching of revision.
+
+
+## [1.1.1] - 2025-03-08
+
+### Added
+
+- Settings class for managing persistent settings across sessions using simple
+  pickling.
+    Includes:
+     - settings dictionary
+     - load() - Unpickle from flat file
+     - save() - Pickle to flat file
+     - get() - value of settings dictionary
+     - set() - value respectively
+
+### Changed
+
+- Added GitHub link to About Me TopLevel
 
 
 ## [1.0.7] - 2025-02-16
@@ -45,7 +64,8 @@ The following includes the changes made along the development branching of revis
 
 - Global debug variable to default (False) on Stable release branch
 - Pruned comments and code spacing
-- Updated README.md to reflect accurate plans checklist (with GitHub Enchancement links)
+- Updated README.md to reflect accurate plans checklist (with GitHub
+  Enchancement links)
 
 ### Removed
 
@@ -72,7 +92,8 @@ The following includes the changes made along the development branching of revis
 - Removed trailing space character from Morse code output
 - Resized parent window default and minimum size definition
 - Morris-Example.jpg to include colorization example
-- README.md: Updated Plans checklist to close bug #1 and add (unfinished) "Persistent settings"
+- README.md: Updated Plans checklist to close bug #1 and add (unfinished)
+  "Persistent settings"
 
 
 ## [0.8.1] - 2025-02-09
@@ -99,7 +120,8 @@ The following includes the changes made along the development branching of revis
 ### Added
 
 - Added for migration of Morse code color handling in GUI() Private scope
-  - GUI::__insert_morse_string__(): Build the Morse string with tag_config colorization
+  - GUI::__insert_morse_string__(): Build the Morse string with tag_config
+    colorization
   - GUI::__colorize__(): Modify the colorization of the displayed Morse code
   - GUI::set_color(): Set the alternation colors for colorization
   - GUI::get_colors(): Return the alternation colors for colorization
@@ -167,7 +189,8 @@ The following includes the changes made along the development branching of revis
 ### Removed
 
 - sound.py - Early stage experimentation that isn't needed in branch
-- header.py - text_dict and morse_dict integrated in main.py, Morris(), and structured
+- header.py - text_dict and morse_dict integrated in main.py, Morris(), and
+  structured
 
 
 ## [0.5.0] - 2025-01-16
@@ -175,9 +198,10 @@ The following includes the changes made along the development branching of revis
 ### Changed
 
 - Space character handling in t2m() which includes:
-    - Ignoring all extra space / invalid characters other than " " that seperates words
+    - Ignoring all extra space / invalid characters other than " " that
+      seperates words
     - Properly padding the output for systematic spacing
-    - Truncating the remaining " / " character due to manner of process loop (BUG)
+    - Truncating the remaining " / " character due to manner of process loop
     - Leaves harmless remaining " " that may be removed in later releases
 
 
@@ -192,9 +216,11 @@ The following includes the changes made along the development branching of revis
 
 ### Changed
 
-- Morris class will be renamed Zach in releases following Unreleased Master (2025-02-16)
+- Morris class will be renamed Zach in releases following Unreleased Master
+  (2025-02-16)
 - Converted Morris (Zach) Morse code handling to data structure
-- Restructured Morris::t2m() into data structure default with local string code construction
+- Restructured Morris::t2m() into data structure default with local string code
+  construction
 
 
 ## [0.3.4] - 2025-01-12
@@ -268,6 +294,8 @@ The following includes the changes made along the development branching of revis
 - Morse code clear text and cipher text translation dictionary
 - GUI layout
 
+
+[1.0.7]: https://github.com/Tomm-Smith/Morris/commit/4560d516fbf57d0e731cdbe6b97935c405937a78
 [1.0.6]: https://github.com/Tomm-Smith/Morris/commit/c1600e8641e5558ec26ff777f7f356085893edcf
 [1.0.5]: https://github.com/Tomm-Smith/Morris/commit/a0b8311dce292b0b7732c795f0a3f9854c08977c
 [1.0.4]: https://github.com/Tomm-Smith/Morris/commit/d2ce5bdc92ac0d5f2ad315f3e1b120c7da18fccf
