@@ -8,6 +8,14 @@ translation utility. The following includes the changes made along the
 development branching of revision.
 
 
+## [1.1.2] - 2025-03-08
+
+### Changed
+
+- Replaced Pickle methods in Settings class with JSON data storage to circumvent
+  immediate vulnerabilities with Pickle
+
+
 ## [1.1.1] - 2025-03-08
 
 ### Added
@@ -295,6 +303,7 @@ development branching of revision.
 - GUI layout
 
 
+[1.1.1]: https://github.com/Tomm-Smith/Morris/commit/8330527b6c395a5c68da9e62effcdd423c11ddd1
 [1.0.7]: https://github.com/Tomm-Smith/Morris/commit/4560d516fbf57d0e731cdbe6b97935c405937a78
 [1.0.6]: https://github.com/Tomm-Smith/Morris/commit/c1600e8641e5558ec26ff777f7f356085893edcf
 [1.0.5]: https://github.com/Tomm-Smith/Morris/commit/a0b8311dce292b0b7732c795f0a3f9854c08977c

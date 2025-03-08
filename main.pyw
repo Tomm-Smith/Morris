@@ -4,7 +4,7 @@ import os
 import tkinter as tk
 from PIL import Image, ImageTk
 from math import floor
-import pickle
+import json
 import webbrowser
 
 debug = False
@@ -49,16 +49,21 @@ class Settings:
          - Sanitize data for security protection of injection 
         """
         if self.__is_file__():
-            fd = open(self.file, "rb")
-            settings_dict = pickle.load(fd)
+            fd = open(self.file, "r")
+            
+            json_str = ""
+            for char in fd:
+                json_str += char
+                
+            settings_dict = json.loads(json_str)
             fd.close()
             
             self.value = settings_dict
             return True
 
     def save(self):
-        fd = open(self.file, "wb")
-        pickle.dump(self.value, fd)
+        fd = open(self.file, "w")
+        fd.write(json.dumps(self.value))
         fd.close()
         
         return True
