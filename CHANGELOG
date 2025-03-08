@@ -8,6 +8,15 @@ translation utility. The following includes the changes made along the
 development branching of revision.
 
 
+## [1.1.3] - 2025-03-08
+
+### Changed
+
+- Handled unhandled exception when persistent settings file is corrupt. Default
+  behavior is now to ignore corrupt settings file and overwrite upon first 
+  instance of saving.
+
+
 ## [1.1.2] - 2025-03-08
 
 ### Changed
@@ -302,7 +311,7 @@ development branching of revision.
 - Morse code clear text and cipher text translation dictionary
 - GUI layout
 
-
+[1.1.2]: https://github.com/Tomm-Smith/Morris/commit/4c3977822f973132f518cff688d455a0feece18d
 [1.1.1]: https://github.com/Tomm-Smith/Morris/commit/8330527b6c395a5c68da9e62effcdd423c11ddd1
 [1.0.7]: https://github.com/Tomm-Smith/Morris/commit/4560d516fbf57d0e731cdbe6b97935c405937a78
 [1.0.6]: https://github.com/Tomm-Smith/Morris/commit/c1600e8641e5558ec26ff777f7f356085893edcf
