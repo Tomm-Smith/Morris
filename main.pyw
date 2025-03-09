@@ -8,7 +8,7 @@ import json
 import webbrowser
 
 debug = False
-version = "1.1.3"
+version = "1.1.4"
 
 class Settings:
     """Data Object to store persistant settings structure
@@ -59,6 +59,7 @@ class Settings:
                 settings_dict = json.loads(json_str)
             except json.decoder.JSONDecodeError:
                 if debug: print(f"ERROR: Settings::load(): \"{self.file}\" file is corrupt")
+                self.save()
                 fd.close()
                 return False
             

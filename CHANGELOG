@@ -8,13 +8,20 @@ translation utility. The following includes the changes made along the
 development branching of revision.
 
 
+## [1.1.4] - 2025-03-09
+
+### Changed
+
+- Revised forementioned exception to now create a new settings file of defaults
+
+
 ## [1.1.3] - 2025-03-08
 
 ### Changed
 
 - Handled unhandled exception when persistent settings file is corrupt. Default
   behavior is now to ignore corrupt settings file and overwrite upon first 
-  instance of saving.
+  instance of saving
 
 
 ## [1.1.2] - 2025-03-08
@@ -30,7 +37,7 @@ development branching of revision.
 ### Added
 
 - Settings class for managing persistent settings across sessions using simple
-  pickling.
+  pickling
     Includes:
      - settings dictionary
      - load() - Unpickle from flat file
@@ -311,6 +318,7 @@ development branching of revision.
 - Morse code clear text and cipher text translation dictionary
 - GUI layout
 
+[1.1.3]: https://github.com/Tomm-Smith/Morris/commit/440d7927f5cc3927c74b375e29ddbacc22c7e7bc
 [1.1.2]: https://github.com/Tomm-Smith/Morris/commit/4c3977822f973132f518cff688d455a0feece18d
 [1.1.1]: https://github.com/Tomm-Smith/Morris/commit/8330527b6c395a5c68da9e62effcdd423c11ddd1
 [1.0.7]: https://github.com/Tomm-Smith/Morris/commit/4560d516fbf57d0e731cdbe6b97935c405937a78
